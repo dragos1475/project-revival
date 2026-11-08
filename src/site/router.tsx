@@ -1,6 +1,7 @@
 // Path router for the public site. Pages are prerendered to /<key>/index.html at build time;
 // after the first load, links swap pages in place through the History API.
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type AnchorHTMLAttributes, type MouseEvent, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useMemo, type AnchorHTMLAttributes, type MouseEvent, type ReactNode } from "react";
+import { useRouter as useTanstackRouter, useRouterState } from "@tanstack/react-router";
 import { baseKey, getLang, keyFor, type Lang } from "./i18n/core";
 
 const BASE = import.meta.env.BASE_URL;
@@ -27,38 +28,33 @@ export function explorerHref(path = "", query: Record<string, string | number> =
   return `${BASE}explorator/${path || qs ? `#/${path}${qs ? `?${qs}` : ""}` : ""}`;
 }
 
-interface Location {
+interface RouterValue {
   key: string;
   hash: string;
-}
-interface RouterValue extends Location {
   navigate: (href: string) => void;
 }
 
 const RouterContext = createContext<RouterValue>({ key: "", hash: "", navigate: () => undefined });
 export const useRouter = () => useContext(RouterContext);
 
-export function RouterProvider({ initialKey, children }: { initialKey: string; children: ReactNode }) {
-  const [loc, setLoc] = useState<Location>({ key: initialKey, hash: "" });
+/** Bridges the site's page keys onto TanStack Router: the URL is the single source of truth. */
+export function RouterProvider({ children }: { initialKey?: string; children: ReactNode }) {
+  const router = useTanstackRouter();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const hash = useRouterState({ select: (s) => s.location.hash });
+  const key = toKey(pathname);
 
-  useEffect(() => {
-    const read = () => setLoc({ key: toKey(window.location.pathname), hash: window.location.hash.slice(1) });
-    if (window.location.hash) read();
-    window.addEventListener("popstate", read);
-    return () => window.removeEventListener("popstate", read);
-  }, []);
+  const navigate = useCallback(
+    (target: string) => {
+      const url = new URL(target, window.location.href);
+      void router.navigate({ href: url.pathname + url.search + url.hash }).then(() => {
+        if (url.hash) document.getElementById(url.hash.slice(1))?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    },
+    [router],
+  );
 
-  const navigate = useCallback((target: string) => {
-    const url = new URL(target, window.location.href);
-    const next = { key: toKey(url.pathname), hash: url.hash.slice(1) };
-    if (url.pathname + url.search + url.hash !== window.location.pathname + window.location.search + window.location.hash) {
-      window.history.pushState(null, "", url.pathname + url.search + url.hash);
-    }
-    setLoc(next);
-    if (next.hash) document.getElementById(next.hash)?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, []);
-
-  const value = useMemo(() => ({ ...loc, navigate }), [loc, navigate]);
+  const value = useMemo(() => ({ key, hash, navigate }), [key, hash, navigate]);
   return <RouterContext.Provider value={value}>{children}</RouterContext.Provider>;
 }
 
