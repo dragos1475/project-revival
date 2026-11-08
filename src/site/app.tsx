@@ -9,7 +9,7 @@ import { PageMotionProvider, sceneForRoute } from "./components/page-motion";
 import { RouterProvider, useRouter } from "./router";
 import { documentTitle, findSiteRoute, NOT_FOUND_DESCRIPTION } from "./routes";
 import NotFoundPage from "./pages/not-found";
-import { langOfKey, setLang, t } from "./i18n/core";
+import { baseKey, langOfKey, setLang, t } from "./i18n/core";
 
 function Pages() {
   const { key, hash } = useRouter();
@@ -27,6 +27,8 @@ function Pages() {
     if (hash) requestAnimationFrame(() => document.getElementById(hash)?.scrollIntoView({ block: "start" }));
     else window.scrollTo({ top: 0 });
   }, [key]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (baseKey(key) === "") return <Page />;
 
   return (
     <SiteLayout>

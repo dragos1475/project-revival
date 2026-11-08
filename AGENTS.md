@@ -35,3 +35,5 @@ use the editor.
 - JSX uses the custom runtime `@/site/i18n` (set in vite.config.ts and tsconfig) and must stay excluded from dep pre-bundling. Why: it translates text on English pages and shares language state with `core.ts`.
 - The LTSER Explorer (`/explorator`) renders client-only with its own hash router. Why: it reads `window` config at import time and uses Leaflet.
 - `/lifewatch-api/*` and `/ltser-api/*` are server-route proxies to `LIFEWATCH_API_URL` / `LTSER_API_URL`. Why: the browser stays same-origin; without them the app falls back to demo data.
+- The public root is the standalone welcome; the existing full homepage remains at `acasa` in both languages. Why: visitors can enter the main site without losing its original content or shared navigation.
+- Welcome geography and counters use the shipped basemap and shared network records through `welcome-data.ts`. Why: animation and totals stay aligned with the real dataset.
