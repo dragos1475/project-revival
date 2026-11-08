@@ -428,3 +428,133 @@
 /* Breadcrumbs on the navy page bands. */
 .bg-navy .crumbs, .bg-navy .crumbs * { color: #a9bcc5; }
 .bg-navy .crumbs a:hover, .bg-navy .crumbs [aria-current] { color: #ffffff; }
+
+/* Standalone documentary welcome: fixed semantic roles, independent of site theme. */
+:root {
+  --welcome-canvas: oklch(0.19 0.035 246);
+  --welcome-ink: oklch(0.96 0.006 230);
+  --welcome-muted: oklch(0.73 0.018 230);
+  --welcome-lime: oklch(0.88 0.16 126);
+  --welcome-rule: oklch(0.72 0.02 230 / 0.22);
+  --welcome-country: oklch(0.29 0.032 240 / 0.25);
+  --welcome-map-line: oklch(0.74 0.03 235 / 0.65);
+  --welcome-shade: linear-gradient(90deg, oklch(0.16 0.034 246 / 0.97) 0%, oklch(0.16 0.034 246 / 0.89) 43%, oklch(0.16 0.034 246 / 0.53) 100%), linear-gradient(0deg, oklch(0.16 0.034 246) 0%, transparent 50%, oklch(0.16 0.034 246 / 0.35) 100%);
+  --welcome-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --welcome-cat-station: oklch(0.87 0.026 235);
+  --welcome-cat-platform: oklch(0.66 0.13 150);
+  --welcome-cat-site: oklch(0.72 0.14 65);
+  --welcome-cat-flux: oklch(0.72 0.09 225);
+  --welcome-cat-catalog: oklch(0.76 0.08 225);
+  --welcome-cat-weather: oklch(0.74 0.10 307);
+}
+.welcome { background: var(--welcome-canvas); color: var(--welcome-ink); font-family: var(--font-display); letter-spacing: 0; }
+.welcome-stage { position: relative; isolation: isolate; overflow: hidden; min-height: max(790px, calc(100svh - 112px)); display: flex; flex-direction: column; padding: 0 5.4%; }
+.welcome-photos, .welcome-shade, .welcome-grain { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.welcome-photos { transform: translateY(var(--welcome-parallax, 0px)); }
+.welcome-photos img { position: absolute; width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: 0; transition: opacity 3s ease-in-out; animation: welcome-ken-burns 28s ease-in-out infinite alternate; }
+.welcome-photos img.is-active { opacity: 1; }
+.welcome-shade { background: var(--welcome-shade); }
+.welcome-grain { z-index: 1; opacity: .035; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='none' d='M0 0h180v180H0z'/%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='.8'/%3E%3C/svg%3E"); }
+.welcome-header { display: flex; justify-content: space-between; align-items: center; min-height: 104px; border-bottom: 1px solid var(--welcome-rule); gap: 16px; }
+.welcome-wordmark { font-weight: 750; font-size: 18px; }
+.welcome-wordmark > span { font-weight: 450; color: var(--welcome-muted); }
+.welcome-header-actions, .welcome-header-actions nav { display: flex; align-items: center; gap: 22px; }
+.welcome-header-actions nav { gap: 12px; font-size: 11px; font-weight: 650; }
+.welcome-header-actions nav a { color: var(--welcome-muted); }
+.welcome-header-actions nav a[aria-current] { color: var(--welcome-lime); }
+.welcome-header-actions nav > span { color: var(--welcome-rule); }
+.welcome .welcome-skip, .welcome .welcome-icon { color: var(--welcome-muted); background: transparent; box-shadow: none; border: 0; border-radius: 2px; }
+.welcome .welcome-skip { font-size: 12px; gap: 12px; min-width: 108px; }
+.welcome .welcome-skip:hover, .welcome .welcome-icon:hover { color: var(--welcome-lime); background: transparent; }
+.welcome-content { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 12px; flex: 1; width: 100%; max-width: 1500px; margin: 0 auto; padding: 66px 0 62px; }
+.welcome-editorial { position: relative; z-index: 2; }
+.welcome-wave { width: 95px; height: 44px; margin-bottom: 24px; overflow: visible; }
+.welcome-wave path { fill: none; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 1; animation: welcome-draw 1s var(--welcome-ease) both; }
+.welcome-wave .wave-lime { stroke: var(--welcome-lime); }
+.welcome-wave .wave-light { stroke: var(--welcome-ink); animation-delay: .4s; stroke-width: 2; }
+.welcome-eyebrow { font-family: var(--font-mono); color: var(--welcome-lime); font-size: 10px; margin-bottom: 20px; animation: welcome-rise 1.4s var(--welcome-ease) .45s both; }
+.welcome-title { font-size: 88px; line-height: 1.035; font-weight: 600; animation: welcome-rise 1.6s var(--welcome-ease) .2s both; margin: 0; }
+.welcome-title > span:not(.welcome-title-dot) { font-weight: 350; }
+.welcome-title-dot { color: var(--welcome-lime); }
+.welcome-university { color: var(--welcome-muted); font-size: 14px; margin-top: 22px; animation: welcome-rise 1.4s var(--welcome-ease) .65s both; }
+.welcome-lede { color: var(--welcome-muted); font-size: 15px; line-height: 1.9; max-width: 450px; margin-top: 31px; animation: welcome-rise 1.5s var(--welcome-ease) 1s both; }
+.welcome-entries { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 33px; opacity: 0; transform: translateY(8px); transition: opacity .9s var(--welcome-ease), transform .9s var(--welcome-ease); }
+.welcome-entries[data-ready="true"] { opacity: 1; transform: none; }
+.welcome .welcome-enter { background: var(--welcome-lime); color: var(--welcome-canvas); min-height: 50px; height: auto; padding: 14px 20px; border-radius: 3px; box-shadow: none; gap: 22px; font-size: 13px; transition: background .8s, transform .8s; }
+.welcome .welcome-enter:hover { background: var(--welcome-ink); transform: translateX(2px); }
+.welcome .welcome-explore { color: var(--welcome-ink); background: transparent; min-height: 44px; font-size: 12px; padding: 0; gap: 10px; }
+.welcome .welcome-explore:hover { color: var(--welcome-lime); }
+.welcome-map { width: 100%; align-self: center; animation: welcome-rise 2.4s var(--welcome-ease) 1.2s both; }
+.welcome-map-heading, .welcome-map-foot { display: flex; justify-content: space-between; gap: 12px; font-size: 9px; font-family: var(--font-mono); color: var(--welcome-muted); }
+.welcome-map-heading { margin: 0 8% 8px; }
+.welcome-map-heading > span:first-child { color: var(--welcome-lime); }
+.welcome-map svg { width: 100%; height: auto; overflow: visible; }
+.welcome-map svg path, .welcome-map svg rect, .welcome-map svg circle { vector-effect: non-scaling-stroke; }
+.welcome-outline { fill: var(--welcome-country); stroke: var(--welcome-map-line); stroke-width: 1; stroke-dasharray: 1; animation: welcome-draw 2.8s var(--welcome-ease) 1.2s both; }
+.welcome-counties path { fill: none; stroke: var(--welcome-rule); stroke-width: .5; }
+.welcome-danube { fill: none; stroke: var(--welcome-lime); stroke-width: 1.3; stroke-dasharray: 1; animation: welcome-draw 2.7s var(--welcome-ease) 1.8s both; }
+.welcome-point { opacity: 0; transition: opacity .7s ease; stroke: var(--welcome-ink); stroke-width: .5; }
+.welcome-point[data-visible="true"] { opacity: 1; }
+.welcome-cat-statiune { fill: var(--welcome-cat-station); }
+.welcome-cat-ltser { fill: var(--welcome-cat-platform); }
+.welcome-cat-lter { fill: var(--welcome-cat-site); }
+.welcome-cat-icos { fill: var(--welcome-cat-flux); }
+.welcome-cat-icos-cat { fill: var(--welcome-cat-catalog); }
+.welcome-cat-meteo { fill: var(--welcome-cat-weather); }
+.welcome-map-label { fill: var(--welcome-muted); text-anchor: middle; font: 10px var(--font-mono); }
+.welcome-river-label { fill: var(--welcome-lime); font: italic 11px var(--font-display); }
+.welcome-map-foot { margin: 0 8%; padding-top: 13px; border-top: 1px solid var(--welcome-rule); font-size: 8px; }
+.welcome-stats { border-top: 1px solid var(--welcome-rule); display: grid; grid-template-columns: repeat(5, 1fr); padding: 30px 0; gap: 20px; animation: welcome-rise 1.5s var(--welcome-ease) 1.5s both; }
+.welcome-stats > div { display: flex; gap: 14px; align-items: center; }
+.welcome-stat-value { font-size: 37px; line-height: 1; font-weight: 400; font-variant-numeric: tabular-nums; min-width: 50px; }
+.welcome-stats > div > span:last-child { font-size: 11px; line-height: 1.6; max-width: 84px; color: var(--welcome-muted); }
+.welcome-stage-footer { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 18px 0 26px; }
+.welcome-caption { display: flex; align-items: center; gap: 13px; max-width: 75%; }
+.welcome-caption-line { height: 1px; width: 24px; flex-shrink: 0; background: var(--welcome-lime); }
+.welcome-caption p { font-size: 10px; color: var(--welcome-muted); }
+.welcome-caption div > span { font-size: 9px; color: var(--welcome-muted); opacity: .7; }
+.welcome-photo-controls { display: flex; align-items: center; gap: 18px; font: 10px var(--font-mono); }
+.welcome-photo-controls > span > span { color: var(--welcome-muted); }
+.welcome-partners { min-height: 112px; padding: 25px 5.4%; display: flex; align-items: center; justify-content: space-between; gap: 28px; border-top: 1px solid var(--welcome-rule); }
+.welcome-partner-label { font: 9px/1.7 var(--font-mono); color: var(--welcome-muted); max-width: 105px; }
+.welcome-partners img { width: 110px; height: 49px; object-fit: contain; filter: grayscale(1) invert(1); mix-blend-mode: screen; opacity: .65; }
+.welcome-partner-type { font-size: 21px; font-weight: 650; color: var(--welcome-muted); }
+.welcome-partner-type small { display: block; font: 7px/2 var(--font-mono); }
+.welcome-partners a { transition: opacity .6s; }
+.welcome-partners a:hover { opacity: .6; }
+@keyframes welcome-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes welcome-rise { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: none; } }
+@keyframes welcome-ken-burns { from { transform: scale(1.02) translateX(0); } to { transform: scale(1.10) translateX(-1%); } }
+.welcome[data-paused="true"] .welcome-photos img { animation-play-state: paused; }
+.welcome[data-complete="true"] .welcome-content *, .welcome[data-complete="true"] .welcome-stats { animation-delay: 0s; animation-duration: 0s; }
+.welcome[data-reduced="true"] *, .welcome[data-reduced="true"] .welcome-photos { animation: none !important; transition: none !important; transform: none !important; }
+@media (min-width: 1450px) { .welcome-title { font-size: 108px; } .welcome-content { gap: 70px; } }
+@media (max-width: 1100px) { .welcome-title { font-size: 76px; } .welcome-entries { gap: 12px; } .welcome-stats > div { gap: 9px; } .welcome-stat-value { font-size: 32px; min-width: 42px; } .welcome-partners { gap: 16px; } .welcome-partner-type { font-size: 18px; } }
+@media (max-width: 760px) {
+  .welcome-stage { padding: 0 7%; min-height: auto; }
+  .welcome-header { min-height: 79px; }
+  .welcome-wordmark { font-size: 14px; }
+  .welcome-wordmark > span { display: none; }
+  .welcome-header-actions { gap: 12px; }
+  .welcome-header-actions nav { gap: 8px; }
+  .welcome-content { grid-template-columns: 1fr; gap: 50px; padding: 45px 0 32px; }
+  .welcome-title { font-size: 66px; }
+  .welcome-wave { margin-bottom: 17px; width: 77px; }
+  .welcome-eyebrow { margin-bottom: 16px; font-size: 9px; }
+  .welcome-university { margin-top: 16px; font-size: 12px; }
+  .welcome-lede { margin-top: 24px; font-size: 13px; max-width: 340px; }
+  .welcome-entries { margin-top: 25px; gap: 15px; }
+  .welcome .welcome-enter { gap: 15px; font-size: 12px; padding: 14px 16px; }
+  .welcome-map { max-width: 500px; margin: auto; }
+  .welcome-map-heading, .welcome-map-foot { margin-left: 0; margin-right: 0; font-size: 8px; }
+  .welcome-stats { grid-template-columns: repeat(3, 1fr); gap: 24px 12px; padding: 25px 0; }
+  .welcome-stats > div { display: block; }
+  .welcome-stat-value { display: block; margin-bottom: 8px; }
+  .welcome-stats > div > span:last-child { display: block; font-size: 10px; }
+  .welcome-stage-footer { align-items: flex-start; }
+  .welcome-partners { flex-wrap: wrap; justify-content: flex-start; padding: 25px 7%; gap: 24px 28px; }
+  .welcome-partner-label { width: 100%; max-width: none; }
+  .welcome-partner-type { font-size: 17px; }
+}
+@media (max-width: 360px) { .welcome-title { font-size: 56px; } .welcome-header-actions { gap: 5px; } .welcome .welcome-skip { min-width: 85px; font-size: 10px; gap: 5px; } }
+@media (prefers-reduced-motion: reduce) { .welcome *, .welcome-photos { animation: none !important; transition: none !important; transform: none !important; } }
