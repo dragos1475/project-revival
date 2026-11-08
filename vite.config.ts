@@ -12,6 +12,10 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 export default defineConfig({
   // The site's JSX runtime (src/site/i18n) wraps React's and translates text on English pages.
   react: { jsxImportSource: "@/site/i18n" },
+  // Keep the JSX runtime out of dependency pre-bundling, or it gets its own copy of the language state.
+  vite: {
+    optimizeDeps: { exclude: ["@/site/i18n/jsx-runtime", "@/site/i18n/jsx-dev-runtime"] },
+  },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
