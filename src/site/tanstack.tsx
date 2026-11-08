@@ -5,6 +5,10 @@ import { toKey } from "./router";
 import { documentTitle, findSiteRoute, NOT_FOUND_DESCRIPTION } from "./routes";
 import { baseKey, langOfKey, loadEn, setLang, t } from "./i18n/core";
 
+// Loaders are not re-run during hydration, so English pages load their dictionaries here,
+// before the first client render, to match the server's English markup.
+if (typeof window !== "undefined" && /^\/en(\/|$)/.test(window.location.pathname)) await loadEn();
+
 const MOVED_STATIONS = /^(en\/)?infrastructura\/(sinaia|braila|orsova|sfantu-gheorghe)(\/.*)?$/;
 
 /** Loader shared by "/" and "/$": handles old URLs and loads English dictionaries before render. */
