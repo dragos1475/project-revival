@@ -4,7 +4,6 @@ import { pick } from '../i18n/core';
 
 export function WelcomeMap({ elapsed }: { elapsed: number }) {
   return <div className="welcome-map">
-    <div className="welcome-map-heading"><span>{pick('O REȚEA. O ȚARĂ. UN VIITOR.', 'ONE NETWORK. ONE COUNTRY. ONE FUTURE.')}</span><span>RO / {WELCOME_POINTS.length}</span></div>
     <svg viewBox="0 0 660 470" role="img" aria-label={pick('Rețeaua reală LifeWatch România, cu Dunărea și punctele de cercetare', 'The LifeWatch Romania network, with the Danube and research locations')}>
       <defs><clipPath id="welcome-country-clip"><path d={ROMANIA_PATH} /></clipPath></defs>
       <g className="welcome-counties" clipPath="url(#welcome-country-clip)">{COUNTY_PATHS.map((d, i) => <path key={i} d={d} />)}</g>
@@ -21,6 +20,6 @@ export function WelcomeMap({ elapsed }: { elapsed: number }) {
       <text x="330" y="162" className="welcome-map-label" data-no-tr>{pick('ROMÂNIA', 'ROMANIA')}</text>
       <text x="270" y="400" className="welcome-river-label" data-no-tr>{pick('Dunărea', 'Danube')}</text>
     </svg>
-    <div className="welcome-map-foot"><span>{pick('De la Carpați la Delta Dunării', 'From the Carpathians to the Danube Delta')}</span><span>43°–49° N / 20°–30° E</span></div>
+    <div className="welcome-map-foot"><span>43°–49° N / 20°–30° E</span></div>
   </div>;
 }

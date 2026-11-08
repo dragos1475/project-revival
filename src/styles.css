@@ -485,9 +485,7 @@
 .welcome .welcome-explore { color: var(--welcome-ink); background: transparent; min-height: 44px; font-size: 12px; padding: 0; gap: 10px; }
 .welcome .welcome-explore:hover { color: var(--welcome-lime); }
 .welcome-map { width: 100%; align-self: center; animation: welcome-rise 2.4s var(--welcome-ease) 1.2s both; }
-.welcome-map-heading, .welcome-map-foot { display: flex; justify-content: space-between; gap: 12px; font-size: 9px; font-family: var(--font-mono); color: var(--welcome-muted); }
-.welcome-map-heading { margin: 0 8% 8px; }
-.welcome-map-heading > span:first-child { color: var(--welcome-lime); }
+.welcome-map-foot { display: flex; justify-content: space-between; gap: 12px; font-size: 9px; font-family: var(--font-mono); color: var(--welcome-muted); }
 .welcome-map svg { width: 100%; height: auto; overflow: visible; }
 .welcome-map svg path, .welcome-map svg rect, .welcome-map svg circle { vector-effect: non-scaling-stroke; }
 .welcome-outline { fill: var(--welcome-country); stroke: var(--welcome-map-line); stroke-width: 1; stroke-dasharray: 1; animation: welcome-draw 2.8s var(--welcome-ease) 1.2s both; }
@@ -546,7 +544,7 @@
   .welcome-entries { margin-top: 25px; gap: 15px; }
   .welcome .welcome-enter { gap: 15px; font-size: 12px; padding: 14px 16px; }
   .welcome-map { max-width: 500px; margin: auto; }
-  .welcome-map-heading, .welcome-map-foot { margin-left: 0; margin-right: 0; font-size: 8px; }
+  .welcome-map-foot { margin-left: 0; margin-right: 0; font-size: 8px; }
   .welcome-stats { grid-template-columns: repeat(3, 1fr); gap: 24px 12px; padding: 25px 0; }
   .welcome-stats > div { display: block; }
   .welcome-stat-value { display: block; margin-bottom: 8px; }
