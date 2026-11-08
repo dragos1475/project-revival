@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
   type ErrorComponentProps,
@@ -73,6 +74,9 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   );
 }
 
+// Applies the stored theme (or the system one) before first paint. See src/lib/theme.ts.
+const THEME_SCRIPT = `(function(){var r=document.documentElement,p=null;try{p=localStorage.getItem("lw.theme")}catch(e){}var d=p==="dark"||(p!=="light"&&window.matchMedia("(prefers-color-scheme: dark)").matches);r.dataset.theme=d?"dark":"light";r.style.colorScheme=d?"dark":"light";if(d){var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content","#0a2130")}})();`;
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     // Replace these placeholders with the app's name and description when first building the app.
@@ -80,23 +84,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     // twitter:image here: every page without its own would inherit the root's preview image.
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
+      { name: "theme-color", content: "#ffffff" },
     ],
     links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "stylesheet", href: appCss },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "preconnect", href: "https://images.unsplash.com" },
     ],
+    scripts: [{ children: THEME_SCRIPT }, { src: "/runtime-config.js" }],
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -105,8 +101,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  const pathname = useRouterState({ select: (st) => st.location.pathname });
+  const lang = pathname === "/en" || pathname.startsWith("/en/") ? "en" : "ro";
   return (
-    <html lang="en">
+    <html lang={lang} suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
