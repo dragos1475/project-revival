@@ -10,33 +10,79 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SplatRouteImport } from './routes/$'
+import { Route as ExploratorRouteImport } from './routes/explorator'
+import { Route as LifewatchApiSplatRouteImport } from './routes/lifewatch-api/$'
+import { Route as LtserApiSplatRouteImport } from './routes/ltser-api/$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SplatRoute = SplatRouteImport.update({
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExploratorRoute = ExploratorRouteImport.update({
+  id: '/explorator',
+  path: '/explorator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LifewatchApiSplatRoute = LifewatchApiSplatRouteImport.update({
+  id: '/lifewatch-api/$',
+  path: '/lifewatch-api/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LtserApiSplatRoute = LtserApiSplatRouteImport.update({
+  id: '/ltser-api/$',
+  path: '/ltser-api/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/$': typeof SplatRoute
+  '/explorator': typeof ExploratorRoute
+  '/lifewatch-api/$': typeof LifewatchApiSplatRoute
+  '/ltser-api/$': typeof LtserApiSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$': typeof SplatRoute
+  '/explorator': typeof ExploratorRoute
+  '/lifewatch-api/$': typeof LifewatchApiSplatRoute
+  '/ltser-api/$': typeof LtserApiSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/$': typeof SplatRoute
+  '/explorator': typeof ExploratorRoute
+  '/lifewatch-api/$': typeof LifewatchApiSplatRoute
+  '/ltser-api/$': typeof LtserApiSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/$' | '/explorator' | '/lifewatch-api/$' | '/ltser-api/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/$' | '/explorator' | '/lifewatch-api/$' | '/ltser-api/$'
+  id:
+    | '__root__'
+    | '/'
+    | '/$'
+    | '/explorator'
+    | '/lifewatch-api/$'
+    | '/ltser-api/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SplatRoute: typeof SplatRoute
+  ExploratorRoute: typeof ExploratorRoute
+  LifewatchApiSplatRoute: typeof LifewatchApiSplatRoute
+  LtserApiSplatRoute: typeof LtserApiSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +94,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/$': {
+      id: '/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof SplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/explorator': {
+      id: '/explorator'
+      path: '/explorator'
+      fullPath: '/explorator'
+      preLoaderRoute: typeof ExploratorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lifewatch-api/$': {
+      id: '/lifewatch-api/$'
+      path: '/lifewatch-api/$'
+      fullPath: '/lifewatch-api/$'
+      preLoaderRoute: typeof LifewatchApiSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ltser-api/$': {
+      id: '/ltser-api/$'
+      path: '/ltser-api/$'
+      fullPath: '/ltser-api/$'
+      preLoaderRoute: typeof LtserApiSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SplatRoute: SplatRoute,
+  ExploratorRoute: ExploratorRoute,
+  LifewatchApiSplatRoute: LifewatchApiSplatRoute,
+  LtserApiSplatRoute: LtserApiSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

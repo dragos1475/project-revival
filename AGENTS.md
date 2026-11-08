@@ -28,3 +28,10 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project rules
+
+- Public-site pages live in the page table `src/site/routes.tsx`; TanStack's `/` and `/$` routes resolve them via `src/site/tanstack.tsx`. Why: one table drives Romanian and `/en/` pages, search and metadata.
+- JSX uses the custom runtime `@/site/i18n` (set in vite.config.ts and tsconfig) and must stay excluded from dep pre-bundling. Why: it translates text on English pages and shares language state with `core.ts`.
+- The LTSER Explorer (`/explorator`) renders client-only with its own hash router. Why: it reads `window` config at import time and uses Leaflet.
+- `/lifewatch-api/*` and `/ltser-api/*` are server-route proxies to `LIFEWATCH_API_URL` / `LTSER_API_URL`. Why: the browser stays same-origin; without them the app falls back to demo data.

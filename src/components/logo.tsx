@@ -1,0 +1,11 @@
+/** LifeWatch România mark: navy disc with a lime and a white wave. */
+export function LogoMark({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 44 44" className={className} aria-hidden>
+      <circle cx="22" cy="22" r="21" fill="#0E2A3B" />
+      <circle cx="22" cy="22" r="20.5" fill="none" className="stroke-white/0 dark:stroke-white/20" />
+      <path d="M7 25c5-6 10-6 15 0s10 6 15 0" fill="none" stroke="#B9E27A" strokeWidth="3" strokeLinecap="round" />
+      <path d="M11 17c4-4 8-4 11 0s7 4 11 0" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" opacity=".7" />
+    </svg>
+  );
+}

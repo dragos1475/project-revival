@@ -1,0 +1,202 @@
+{
+ "universitatea-din-bucuresti-711789be": {
+  "hash": "711789be",
+  "src": "img/site/universitatea-din-bucuresti-711789be.png",
+  "alt": "Universitatea din București",
+  "page": "acces.html",
+  "w": 500,
+  "h": 116
+ },
+ "lifewatch-romania-cd6b2b82": {
+  "hash": "cd6b2b82",
+  "src": "img/site/lifewatch-romania-cd6b2b82.png",
+  "alt": "LifeWatch România",
+  "page": "acces.html",
+  "w": 520,
+  "h": 284
+ },
+ "rack-urile-centrului-de-date-de-la-sinaia-8a3e1856": {
+  "hash": "8a3e1856",
+  "src": "img/site/rack-urile-centrului-de-date-de-la-sinaia-8a3e1856.jpg",
+  "alt": "Rack-urile centrului de date de la Sinaia",
+  "page": "acces.html",
+  "w": 774,
+  "h": 784
+ },
+ "universitatea-din-bucuresti-f6f2fbfc": {
+  "hash": "f6f2fbfc",
+  "src": "img/site/universitatea-din-bucuresti-f6f2fbfc.png",
+  "alt": "Universitatea din București",
+  "page": "acces.html",
+  "w": 500,
+  "h": 112
+ },
+ "rcses-centrul-de-cercetare-in-ecologie-sistemica-167ac2e4": {
+  "hash": "167ac2e4",
+  "src": "img/site/rcses-centrul-de-cercetare-in-ecologie-sistemica-167ac2e4.png",
+  "alt": "RCSES, Centrul de Cercetare în Ecologie Sistemică și Sustenabilitate",
+  "page": "acces.html",
+  "w": 312,
+  "h": 156
+ },
+ "rcses-da23b8f9": {
+  "hash": "da23b8f9",
+  "src": "img/site/rcses-da23b8f9.jpg",
+  "alt": "RCSES",
+  "page": "acces.html",
+  "w": 400,
+  "h": 206
+ },
+ "uniunea-europeana-guvernul-romaniei-programul-op-8e4159e0": {
+  "hash": "8e4159e0",
+  "src": "img/site/uniunea-europeana-guvernul-romaniei-programul-op-8e4159e0.jpg",
+  "alt": "Uniunea Europeană, Guvernul României, Programul Operațional Competitivitate, Instrumente Structurale 2014–2020",
+  "page": "acces.html",
+  "w": 501,
+  "h": 134
+ },
+ "statia-de-flux-icos-de-la-enisala-vedere-aeriana-9dcd0bec": {
+  "hash": "9dcd0bec",
+  "src": "img/site/statia-de-flux-icos-de-la-enisala-vedere-aeriana-9dcd0bec.jpg",
+  "alt": "Stația de flux ICOS de la Enisala, vedere aeriană",
+  "page": "index.html",
+  "w": 900,
+  "h": 581
+ },
+ "laboratorul-de-genetica-de-la-braila-fab11817": {
+  "hash": "fab11817",
+  "src": "img/site/laboratorul-de-genetica-de-la-braila-fab11817.jpg",
+  "alt": "Laboratorul de genetică de la Brăila",
+  "page": "index.html",
+  "w": 480,
+  "h": 471
+ },
+ "centrul-de-date-de-la-sinaia-d6f67b83": {
+  "hash": "d6f67b83",
+  "src": "img/site/centrul-de-date-de-la-sinaia-d6f67b83.jpg",
+  "alt": "Centrul de date de la Sinaia",
+  "page": "index.html",
+  "w": 474,
+  "h": 480
+ },
+ "instalarea-unui-turn-de-masurare-09c06e7d": {
+  "hash": "09c06e7d",
+  "src": "img/site/instalarea-unui-turn-de-masurare-09c06e7d.jpg",
+  "alt": "Instalarea unui turn de măsurare",
+  "page": "index.html",
+  "w": 469,
+  "h": 480
+ },
+ "geoportalul-lifewatch-romania-a44b1326": {
+  "hash": "a44b1326",
+  "src": "img/site/geoportalul-lifewatch-romania-a44b1326.jpg",
+  "alt": "Geoportalul LifeWatch România",
+  "page": "index.html",
+  "w": 900,
+  "h": 473
+ },
+ "statia-de-flux-icos-de-la-enisala-in-zona-umeda--47c58b77": {
+  "hash": "47c58b77",
+  "src": "img/site/statia-de-flux-icos-de-la-enisala-in-zona-umeda--47c58b77.jpg",
+  "alt": "Stația de flux ICOS de la Enisala, în zona umedă a Deltei Dunării, vedere aeriană",
+  "page": "infrastructura.html",
+  "w": 955,
+  "h": 617
+ },
+ "schema-infrastructurii-laboratoarele-statiile-de-49bb8db2": {
+  "hash": "49bb8db2",
+  "src": "img/site/schema-infrastructurii-laboratoarele-statiile-de-49bb8db2.jpg",
+  "alt": "Schema infrastructurii: laboratoarele, stațiile de monitorizare și laboratorul mobil socio-ecologic legate de centrul de date",
+  "page": "infrastructura.html",
+  "w": 1200,
+  "h": 632
+ },
+ "montarea-senzorilor-la-turnul-de-flux-de-la-enis-ba0b7821": {
+  "hash": "ba0b7821",
+  "src": "img/site/montarea-senzorilor-la-turnul-de-flux-de-la-enis-ba0b7821.jpg",
+  "alt": "Montarea senzorilor la turnul de flux de la Enisala",
+  "page": "infrastructura.html",
+  "w": 457,
+  "h": 617
+ },
+ "instalarea-unui-turn-de-masurare-cu-panou-solar--00c041bf": {
+  "hash": "00c041bf",
+  "src": "img/site/instalarea-unui-turn-de-masurare-cu-panou-solar--00c041bf.jpg",
+  "alt": "Instalarea unui turn de măsurare cu panou solar într-un sit agricol",
+  "page": "infrastructura.html",
+  "w": 577,
+  "h": 591
+ },
+ "schema-retelei-centrului-de-date-stive-hci-stoca-89f8fa52": {
+  "hash": "89f8fa52",
+  "src": "img/site/schema-retelei-centrului-de-date-stive-hci-stoca-89f8fa52.jpg",
+  "alt": "Schema rețelei centrului de date: stive HCI, stocare SAN și NAS, backup",
+  "page": "infrastructura.html",
+  "w": 1010,
+  "h": 732
+ },
+ "rotavapor-si-echipamente-de-laborator-2b8180fc": {
+  "hash": "2b8180fc",
+  "src": "img/site/rotavapor-si-echipamente-de-laborator-2b8180fc.jpg",
+  "alt": "Rotavapor și echipamente de laborator",
+  "page": "infrastructura.html",
+  "w": 480,
+  "h": 389
+ },
+ "microscoape-si-secventiator-fe4f88b6": {
+  "hash": "fe4f88b6",
+  "src": "img/site/microscoape-si-secventiator-fe4f88b6.jpg",
+  "alt": "Microscoape și secvențiator",
+  "page": "infrastructura.html",
+  "w": 480,
+  "h": 355
+ },
+ "bancul-de-lucru-pentru-biologie-moleculara-1d8aca66": {
+  "hash": "1d8aca66",
+  "src": "img/site/bancul-de-lucru-pentru-biologie-moleculara-1d8aca66.jpg",
+  "alt": "Bancul de lucru pentru biologie moleculară",
+  "page": "infrastructura.html",
+  "w": 480,
+  "h": 370
+ },
+ "integrarea-serviciilor-de-date-servicii-europene-e35237c7": {
+  "hash": "e35237c7",
+  "src": "img/site/integrarea-serviciilor-de-date-servicii-europene-e35237c7.jpg",
+  "alt": "Integrarea serviciilor de date: servicii europene, naționale și specifice, instrumente de ingestie și procesare, baza de date și biblioteca de cunoștințe, servicii web, geoportal și API",
+  "page": "infrastructura.html",
+  "w": 1200,
+  "h": 792
+ },
+ "serviciile-de-infrastructura-ale-universitatii-d-4d20c4b6": {
+  "hash": "4d20c4b6",
+  "src": "img/site/serviciile-de-infrastructura-ale-universitatii-d-4d20c4b6.jpg",
+  "alt": "Serviciile de infrastructură ale Universității din București: Kubernetes cu clustere GeoServer, EWPS și GeoPortal, stocare de obiecte, proxy HAProxy",
+  "page": "infrastructura.html",
+  "w": 1200,
+  "h": 718
+ },
+ "harta-fapar-si-seria-de-timp-pentru-o-zona-in-lt-a5da705a": {
+  "hash": "a5da705a",
+  "src": "img/site/harta-fapar-si-seria-de-timp-pentru-o-zona-in-lt-a5da705a.jpg",
+  "alt": "Harta FAPAR și seria de timp pentru o zonă, în LTSER Explorer",
+  "page": "infrastructura.html",
+  "w": 1200,
+  "h": 410
+ },
+ "geoportalul-lifewatch-romania-cu-harta-umiditati-e8ed8185": {
+  "hash": "e8ed8185",
+  "src": "img/site/geoportalul-lifewatch-romania-cu-harta-umiditati-e8ed8185.jpg",
+  "alt": "Geoportalul LifeWatch România cu harta umidității solului și serie de timp",
+  "page": "infrastructura.html",
+  "w": 1200,
+  "h": 631
+ },
+ "ltser-explorer-harta-umiditatii-solului-la-nivel-4b5d473a": {
+  "hash": "4b5d473a",
+  "src": "img/site/ltser-explorer-harta-umiditatii-solului-la-nivel-4b5d473a.jpg",
+  "alt": "LTSER Explorer: harta umidității solului la nivel național și seria de timp pentru un punct",
+  "page": "infrastructura.html",
+  "w": 1200,
+  "h": 587
+ }
+}

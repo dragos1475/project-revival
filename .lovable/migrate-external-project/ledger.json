@@ -1,0 +1,44 @@
+[
+ {
+  "capability": "code",
+  "source": "Vite + React site and LTSER Explorer",
+  "outcome": "migrate",
+  "status": "verified",
+  "next_action": "none"
+ },
+ {
+  "capability": "schema/records/auth",
+  "source": "none (static content in repo)",
+  "outcome": "not applicable",
+  "status": "verified",
+  "next_action": "none"
+ },
+ {
+  "capability": "external APIs",
+  "source": "LifeWatch API + LTSER API via /lifewatch-api and /ltser-api proxy",
+  "outcome": "preserve via server-route proxy; demo fallback",
+  "status": "pending",
+  "next_action": "set LIFEWATCH_API_URL / LTSER_API_URL when the services are online (demo data meanwhile)"
+ },
+ {
+  "capability": "forms",
+  "source": "Netlify Forms (acces, contact)",
+  "outcome": "needs replacement",
+  "status": "pending",
+  "next_action": "user decides: store in Lovable Cloud and/or email"
+ },
+ {
+  "capability": "redirects",
+  "source": "public/_redirects",
+  "outcome": "migrate to route redirects",
+  "status": "verified",
+  "next_action": "none"
+ },
+ {
+  "capability": "verification",
+  "source": "-",
+  "outcome": "-",
+  "status": "verified",
+  "next_action": "site RO/EN pages, explorer, redirects checked in browser"
+ }
+]
