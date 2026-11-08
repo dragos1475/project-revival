@@ -14,12 +14,12 @@ export function WelcomeMap({ elapsed }: { elapsed: number }) {
         const [x, y] = projectPoint(p.lon, p.lat);
         const shape = CAT[p.cat].shape;
         return <g key={p.key} transform={`translate(${x} ${y})`} className={`welcome-point welcome-cat-${p.cat}`} data-visible={elapsed >= pointTime(i)}>
-          <title>{p.ro}</title>
+          <title data-no-tr>{p.ro}</title>
           {shape === 'square' ? <rect x={-4} y={-4} width={8} height={8} /> : shape === 'triangle' ? <path d="M0 -5 L5 4 L-5 4 Z" /> : shape === 'diamond' ? <path d="M0 -4 L4 0 L0 4 L-4 0 Z" /> : <circle r={4} />}
         </g>;
       })}
-      <text x="330" y="162" className="welcome-map-label">ROMÂNIA</text>
-      <text x="270" y="400" className="welcome-river-label">Dunărea</text>
+      <text x="330" y="162" className="welcome-map-label" data-no-tr>{pick('ROMÂNIA', 'ROMANIA')}</text>
+      <text x="270" y="400" className="welcome-river-label" data-no-tr>{pick('Dunărea', 'Danube')}</text>
     </svg>
     <div className="welcome-map-foot"><span>{pick('De la Carpați la Delta Dunării', 'From the Carpathians to the Danube Delta')}</span><span>43°–49° N / 20°–30° E</span></div>
   </div>;

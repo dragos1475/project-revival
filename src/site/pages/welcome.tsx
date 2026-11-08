@@ -35,6 +35,7 @@ export default function WelcomePage() {
     const start = performance.now();
     let frame = 0;
     const tick = (now: number) => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setElapsed(INTRO_DURATION); return; }
       const value = Math.min(INTRO_DURATION, now - start);
       setElapsed(value);
       if (value < INTRO_DURATION) frame = requestAnimationFrame(tick);
@@ -65,7 +66,7 @@ export default function WelcomePage() {
       <div className="welcome-photos" aria-hidden="true">{PHOTOS.map((p, i) => <img key={p.src} src={asset(p.src)} alt="" className={photo === i ? 'is-active' : ''} loading={i ? 'lazy' : 'eager'} />)}</div>
       <div className="welcome-shade" /><div className="welcome-grain" aria-hidden="true" />
       <header className="welcome-header">
-        <span className="welcome-wordmark">LifeWatch <span>România</span></span>
+        <span className="welcome-wordmark">LifeWatch <span data-no-tr>{pick('România', 'Romania')}</span></span>
         <div className="welcome-header-actions">
           <nav aria-label={pick('Limba paginii', 'Page language')}><a href={hrefIn('', 'ro')} aria-current={getLang() === 'ro' ? 'page' : undefined}>RO</a><span>/</span><a href={hrefIn('', 'en')} aria-current={getLang() === 'en' ? 'page' : undefined}>EN</a></nav>
           {!complete ? <Button variant="ghost" className="welcome-skip" onClick={() => setElapsed(INTRO_DURATION)}>{pick('Sari peste', 'Skip intro')} <ArrowRight /></Button> : <Button variant="ghost" size="icon" className="welcome-icon" aria-label={pick('Reia introducerea', 'Replay introduction')} title={pick('Reia introducerea', 'Replay introduction')} onClick={() => { setElapsed(0); setRun(r => r + 1); }}><RotateCcw /></Button>}
@@ -75,7 +76,7 @@ export default function WelcomePage() {
         <div className="welcome-editorial">
           <svg className="welcome-wave" viewBox="0 0 120 55" aria-hidden="true"><path className="wave-lime" d="M5 35 C23 12 40 12 58 35 S93 58 115 30" pathLength={1} /><path className="wave-light" d="M18 17 C32 3 45 3 59 17 S86 31 102 14" pathLength={1} /></svg>
           <p className="welcome-eyebrow">{pick('INFRASTRUCTURĂ DE CERCETARE', 'RESEARCH INFRASTRUCTURE')}</p>
-          <h1 className="welcome-title">LifeWatch<br /><span>România</span><span className="welcome-title-dot">.</span></h1>
+          <h1 className="welcome-title">LifeWatch<br /><span data-no-tr>{pick('România', 'Romania')}</span><span className="welcome-title-dot">.</span></h1>
           <p className="welcome-university">{pick('Universitatea din București', 'University of Bucharest')}</p>
           <p className="welcome-lede">{pick('Înțelegem natura. Conectăm datele.', 'Understanding nature. Connecting data.')}<br />{pick('De la observația din teren la știința unui viitor sustenabil.', 'From observations in the field to the science of a sustainable future.')}</p>
           <div className="welcome-entries" data-ready={elapsed >= ENTRY_DELAY} inert={elapsed < ENTRY_DELAY}>
@@ -87,7 +88,7 @@ export default function WelcomePage() {
       </div>
       <div className="welcome-stats" aria-label={pick('Rețeaua în cifre', 'Network in numbers')}>{WELCOME_GROUPS.map((g, i) => <div key={g.label}><span className="welcome-stat-value">{String(counts[i]).padStart(2, '0')}</span><span>{pick(g.label, g.en)}</span></div>)}</div>
       <footer className="welcome-stage-footer">
-        <div className="welcome-caption"><span className="welcome-caption-line" /><div><p>{PHOTOS[photo].alt}</p><span>© {PHOTOS[photo].credit}</span></div></div>
+        <div className="welcome-caption"><span className="welcome-caption-line" /><div><p data-no-tr>{PHOTOS[photo].alt}</p><span data-no-tr>© {PHOTOS[photo].credit}</span></div></div>
         <div className="welcome-photo-controls"><span>{String(photo + 1).padStart(2, '0')} <span>/ {String(PHOTOS.length).padStart(2, '0')}</span></span>{!reduced && <Button variant="ghost" size="icon" className="welcome-icon" onClick={() => setPaused(p => !p)} aria-label={paused ? pick('Pornește fotografiile', 'Play photos') : pick('Oprește fotografiile', 'Pause photos')} title={paused ? pick('Pornește fotografiile', 'Play photos') : pick('Oprește fotografiile', 'Pause photos')}>{paused ? <Play /> : <Pause />}</Button>}</div>
       </footer>
     </section>
