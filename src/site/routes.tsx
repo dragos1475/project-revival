@@ -5,6 +5,7 @@ import { HERO_PHOTO } from "@/lib/photos";
 import { STATIONS } from "./content/stations";
 import { PLATFORMS } from "./content/platforms";
 import HomePage from "./pages/home";
+import WelcomePage from "./pages/welcome";
 import AboutPage from "./pages/about";
 import StationsPage from "./pages/stations";
 import InfrastructurePage from "./pages/infrastructure";
@@ -38,7 +39,8 @@ const page = (key: string, title: string, description: string, Page: ComponentTy
 
 /** Romanian pages; every one also exists in English under /en/. */
 const RO_ROUTES: SiteRoute[] = [
-  page("", "Acasă", "Infrastructura națională de cercetare e-Science pentru biodiversitate și ecosisteme: stații de teren, platforme LTSER și date deschise.", HomePage, photoSrc(HERO_PHOTO, 1200)),
+  page("", "Bun venit", "LifeWatch România, Universitatea din București. Descoperă rețeaua de cercetare pentru biodiversitate și ecosisteme, de la Carpați la Delta Dunării.", WelcomePage),
+  page("acasa", "Acasă", "Infrastructura națională de cercetare e-Science pentru biodiversitate și ecosisteme: stații de teren, platforme LTSER și date deschise.", HomePage, photoSrc(HERO_PHOTO, 1200)),
   page("despre", "Despre", "Misiunea, obiectivele și istoricul LifeWatch România, infrastructură de cercetare a Universității din București.", AboutPage),
   page("infrastructura", "Proiectul și infrastructura", "Proiectul LifeWatch România: 11 laboratoare, rețeaua de stații din teren, centrul de date de la Sinaia, platforma web și serviciile de date.", InfrastructurePage),
   page("acces", "Acces la infrastructură", "Cine răspunde de infrastructura LifeWatch România, cine o poate folosi, procedura, costurile și cererea de acces.", AccessPage),
