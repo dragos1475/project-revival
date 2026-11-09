@@ -1,5 +1,9 @@
 {
 "dict": {
+"API LifeWatch România, lista stațiilor din teren": "LifeWatch Romania API, list of field stations",
+"Fără since și until, serviciul întoarce ultimele două ore înregistrate. Cu ele se poate cere un interval de cel mult 7 zile, în format ISO 8601.": "Without since and until, the service returns the last two recorded hours. With them you can request a window of at most 7 days, in ISO 8601 format.",
+"Măsurătorile unei stații se cer apoi cu /stations/{id}/measurements, folosind id-ul din listă.": "A station's measurements are then requested with /stations/{id}/measurements, using the id from the list.",
+"Toate rutele API": "All API routes",
 "20 s până la 60 s, eddy covariance la 2,5 s": "20 s to 60 s, eddy covariance at 2.5 s",
 "API de acces": "Data access API",
 "API de acces la date": "Data access API",
@@ -679,6 +683,10 @@
 [
 "^Stratul „(.+)” vine de la serverele EEA și nu se poate încărca acum\\.$",
 "The “$1” layer comes from the EEA servers and cannot be loaded now."
+],
+[
+"^API LifeWatch România, ultimele măsurători ale stației (.+)$",
+"LifeWatch Romania API, latest measurements from station $1"
 ]
 ]
 }

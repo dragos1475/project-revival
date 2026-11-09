@@ -142,6 +142,18 @@ export const CAT: Record<Cat, CatMeta> = {
 
 /** The LifeWatch field network, as LTSER Explorer lists it. */
 export const LTSER_URL = "http://193.226.53.30/ltser/";
+
+/**
+ * LifeWatch API station ids, in the order of lifewatch-romania/seed_data/stations.csv (ids 1 to 25).
+ * LTSER Explorer shows the seed codes IF-Cor as GR-Mih and IF-Ste as IL-Lil, and the eddy covariance
+ * codes in capitals.
+ */
+const API_STATIONS = ["GR-Mih", "TR-Drv", "TL-Sar", "BR-Mar", "BR-Bra", "TL-Mal", "CL-Scm", "AG-Mih", "PH-Ber", "AG-Dmb", "MH-Ors", "GR-Bul", "IL-Lil", "DB-Mor", "HD-Uri", "HD-San", "BH-Pad", "TL-Sfg", "BV-Brv", "GR-Com", "BV", "COM", "ENISALA", "IMB", "POLI"];
+/** The LifeWatch API id of a field station, or null for points outside the network. */
+export const apiStationId = (p: LwPoint) => {
+  const i = p.ltser ? API_STATIONS.indexOf(p.ltser.code) : -1;
+  return i < 0 ? null : i + 1;
+};
 export const LTSER_NETS = DATA.ltserNets;
 export const NETS: Record<NetCode, { t: string; d: string }> = {
   ws: { t: "Stație meteo", d: "temperatura și umiditatea aerului, vântul, presiunea, precipitațiile, radiația globală, temperatura și umiditatea solului" },

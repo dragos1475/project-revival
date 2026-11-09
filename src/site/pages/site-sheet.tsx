@@ -23,6 +23,7 @@ import {
   customPoint,
   LTSER_URL,
   NETS,
+  apiStationId,
   placeText,
   STATION_SLUG,
   type LwClimate,
@@ -828,12 +829,18 @@ function DataApi({ p }: { p: LwPoint }) {
     return () => URL.revokeObjectURL(u);
   }, [json]);
   const [s, w, n, e] = p.aoi;
+  const apiId = apiStationId(p);
   const calls: [string, string][] = [
     ...(p.deims ? [["DEIMS-SDR, fișa completă a sitului", `curl "https://deims.org/api/sites/${p.id}"`] as [string, string]] : []),
     ["iNaturalist, specii în zona sitului", `curl "https://api.inaturalist.org/v1/observations/species_counts?${bboxQuery(p)}&verifiable=true"`],
     ["GBIF, număr de ocurențe", `curl "https://api.gbif.org/v1/occurrence/search?limit=0&decimalLatitude=${s},${n}&decimalLongitude=${w},${e}"`],
     ["NASA POWER, climatologie lunară", `curl "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M,PRECTOTCORR&community=AG&latitude=${p.lat}&longitude=${p.lon}&format=JSON"`],
-    ["API LifeWatch România, măsurători brute (24 h)", `curl "https://[domeniu-api-lifewatch]/api/v1/stations/[id]/air_temperature?hours=24"`],
+    (apiId
+      ? [
+          `API LifeWatch România, ultimele măsurători ale stației ${p.ltser!.code}`,
+          `curl "https://[domeniu-api-lifewatch]/stations/${apiId}/measurements?${p.cat === "icos" ? "variables=co2_molar_fraction&variables=h2o_molar_fraction" : "variables=air_temperature&variables=air_humidity"}"`,
+        ]
+      : ["API LifeWatch România, lista stațiilor din teren", `curl "https://[domeniu-api-lifewatch]/stations"`]) as [string, string],
   ];
   const pre = "overflow-x-auto rounded-lg bg-[#13212b] px-4 py-3.5 font-mono text-[12.5px] whitespace-pre text-lime";
   return (
@@ -866,7 +873,15 @@ function DataApi({ p }: { p: LwPoint }) {
           <pre className={pre}>{c}</pre>
         </div>
       ))}
-      <p className="mt-3 text-[13px] text-subtle">Domeniul API-ului LifeWatch România se completează după publicarea serviciului.</p>
+      <p className="mt-3 text-[13px] text-subtle">
+        {apiId
+          ? "Fără since și until, serviciul întoarce ultimele două ore înregistrate. Cu ele se poate cere un interval de cel mult 7 zile, în format ISO 8601."
+          : "Măsurătorile unei stații se cer apoi cu /stations/{id}/measurements, folosind id-ul din listă."}{" "}
+        Domeniul API-ului LifeWatch România se completează după publicarea serviciului.{" "}
+        <Link to="date/api" className="font-semibold text-[#2f7d4f] hover:underline dark:text-accent">
+          Toate rutele API
+        </Link>
+      </p>
       {p.ltser ? (
         <>
           <H3 className="mt-7">Măsurătorile din teren</H3>
