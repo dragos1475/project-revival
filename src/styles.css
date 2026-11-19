@@ -425,6 +425,35 @@
 .climograph, :root { --cg-p: #8fc1d6; --cg-p-text: #1f6e8c; --cg-t: #0e2a3b; --cg-band: #2f7d4f; }
 :root[data-theme="dark"], :root[data-theme="dark"] .climograph { --cg-p: #3e7f9c; --cg-p-text: #8fc1d6; --cg-t: #eaf1f3; --cg-band: #b9e27a; }
 
+/* LifeWatch logo (components/logo.tsx). The intro: globe settles, the arrow travels round it from the top,
+   then the leaf drifts down and settles under the microscope lens. */
+.lw-logo { overflow: visible; --lw-logo-green: #7ed600; --lw-logo-scope: #7c7c7c; --lw-logo-ease: cubic-bezier(0.22, 0.61, 0.36, 1); --lw-logo-arc-ease: cubic-bezier(0.6, 0.04, 0.2, 1); }
+:root[data-theme="dark"] .lw-logo { --lw-logo-scope: #a3a3a3; }
+.lw-logo-globe, .lw-logo-band, .lw-logo-head path, .lw-logo-leaf { fill: var(--lw-logo-green); }
+.lw-logo-scope { fill: var(--lw-logo-scope); }
+.lw-logo[data-play] .lw-logo-globe { transform-box: fill-box; transform-origin: center; animation: lw-logo-globe 1s var(--lw-logo-ease) both; }
+.lw-logo[data-play] .lw-logo-scope { transform-box: fill-box; transform-origin: center bottom; animation: lw-logo-scope 0.9s var(--lw-logo-ease) 0.15s both; }
+.lw-logo[data-play] .lw-logo-reveal { stroke-dasharray: 1; animation: lw-logo-reveal 1.7s var(--lw-logo-arc-ease) 0.35s both; }
+.lw-logo[data-play] .lw-logo-head { animation: lw-logo-head 1.7s var(--lw-logo-arc-ease) 0.35s both; }
+.lw-logo[data-play] .lw-logo-leaf { transform-box: fill-box; transform-origin: 35% 50%; animation: lw-logo-leaf 2.4s ease-in-out 1.45s both; }
+.lw-logo[data-play][data-variant="hero"] .lw-logo-leaf { animation: lw-logo-leaf 2.4s ease-in-out 1.45s both, lw-logo-float 4.8s ease-in-out 3.85s infinite alternate; }
+@keyframes lw-logo-globe { from { opacity: 0; transform: scale(0.86) rotate(-8deg); } to { opacity: 1; transform: none; } }
+@keyframes lw-logo-scope { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+@keyframes lw-logo-reveal { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes lw-logo-head { 0% { opacity: 0; transform: rotate(187deg); } 12% { opacity: 1; } 100% { opacity: 1; transform: rotate(0deg); } }
+@keyframes lw-logo-leaf {
+  0% { opacity: 0; transform: translate(200px, -380px) rotate(-30deg); }
+  14% { opacity: 1; }
+  32% { transform: translate(110px, -255px) rotate(14deg); }
+  55% { transform: translate(150px, -130px) rotate(-10deg); }
+  78% { transform: translate(40px, -38px) rotate(5deg); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes lw-logo-float { from { transform: none; } to { transform: translate(0, -14px) rotate(-2.5deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .lw-logo[data-play] * { animation: none !important; }
+}
+
 /* Breadcrumbs on the navy page bands. */
 .bg-navy .crumbs, .bg-navy .crumbs * { color: #a9bcc5; }
 .bg-navy .crumbs a:hover, .bg-navy .crumbs [aria-current] { color: #ffffff; }
@@ -468,10 +497,9 @@
 .welcome .welcome-skip:hover, .welcome .welcome-icon:hover { color: var(--welcome-lime); background: transparent; }
 .welcome-content { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 12px; flex: 1; width: 100%; max-width: 1500px; margin: 0 auto; padding: 66px 0 62px; }
 .welcome-editorial { position: relative; z-index: 2; }
-.welcome-wave { width: 95px; height: 44px; margin-bottom: 24px; overflow: visible; }
-.welcome-wave path { fill: none; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 1; animation: welcome-draw 1s var(--welcome-ease) both; }
-.welcome-wave .wave-lime { stroke: var(--welcome-lime); }
-.welcome-wave .wave-light { stroke: var(--welcome-ink); animation-delay: .4s; stroke-width: 2; }
+.welcome-logo { display: block; width: 132px; height: auto; margin-bottom: 26px; --lw-logo-scope: #d3d9dc; }
+/* Keep the leaf floating after the intro completes (the rule below zeroes every other welcome animation). */
+.welcome[data-complete="true"] .welcome-logo .lw-logo-leaf { animation: lw-logo-float 4.8s ease-in-out infinite alternate; }
 .welcome-eyebrow { font-family: var(--font-mono); color: var(--welcome-lime); font-size: 10px; margin-bottom: 20px; animation: welcome-rise 1.4s var(--welcome-ease) .45s both; }
 .welcome-title { font-size: 88px; line-height: 1.035; font-weight: 600; animation: welcome-rise 1.6s var(--welcome-ease) .2s both; margin: 0; }
 .welcome-title > span:not(.welcome-title-dot) { font-weight: 350; }
@@ -537,7 +565,7 @@
   .welcome-header-actions nav { gap: 8px; }
   .welcome-content { grid-template-columns: 1fr; gap: 50px; padding: 45px 0 32px; }
   .welcome-title { font-size: 66px; }
-  .welcome-wave { margin-bottom: 17px; width: 77px; }
+  .welcome-logo { margin-bottom: 18px; width: 96px; }
   .welcome-eyebrow { margin-bottom: 16px; font-size: 9px; }
   .welcome-university { margin-top: 16px; font-size: 12px; }
   .welcome-lede { margin-top: 24px; font-size: 13px; max-width: 340px; }

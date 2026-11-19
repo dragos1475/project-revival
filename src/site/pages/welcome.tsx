@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, ArrowUpRight, Pause, Play, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { LogoMark } from '@/components/logo';
 import { WelcomeMap } from '../components/welcome-map';
 import { asset } from '../content/lw';
 import { LOGOS, sitePhoto } from '../content/site-photos';
@@ -74,7 +75,7 @@ export default function WelcomePage() {
       </header>
       <div className="welcome-content" key={run}>
         <div className="welcome-editorial">
-          <svg className="welcome-wave" viewBox="0 0 120 55" aria-hidden="true"><path className="wave-lime" d="M5 35 C23 12 40 12 58 35 S93 58 115 30" pathLength={1} /><path className="wave-light" d="M18 17 C32 3 45 3 59 17 S86 31 102 14" pathLength={1} /></svg>
+          <LogoMark className="welcome-logo" animate variant="hero" />
           <p className="welcome-eyebrow">{pick('INFRASTRUCTURĂ DE CERCETARE', 'RESEARCH INFRASTRUCTURE')}</p>
           <h1 className="welcome-title">LifeWatch<br /><span data-no-tr>{pick('România', 'Romania')}</span><span className="welcome-title-dot">.</span></h1>
           <p className="welcome-university">{pick('Universitatea din București', 'University of Bucharest')}</p>

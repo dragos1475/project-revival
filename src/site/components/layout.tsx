@@ -20,7 +20,7 @@ import { LangPrompt, LangSwitch } from "./lang";
 function Brand({ inverse = false }: { inverse?: boolean }) {
   return (
     <Link to="" className={cn("flex min-w-0 shrink-0 items-center gap-3 rounded-lg", inverse ? "text-white" : "text-navy dark:text-foreground")} aria-label="LifeWatch România, pagina principală">
-      <LogoMark className="size-11 shrink-0" />
+      <LogoMark className="h-11 w-auto shrink-0" animate="once" />
       <span className="grid min-w-0 leading-tight">
         <span className="font-display text-[21px] leading-[1.1] font-extrabold">LifeWatch România</span>
         <span className={cn("hidden text-[12px] sm:block", inverse ? "text-white/70" : "text-subtle")}>Infrastructură de cercetare pentru biodiversitate și ecosisteme</span>
