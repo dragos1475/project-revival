@@ -30,6 +30,10 @@ export const EUNIS_LEVELS: { id: BaseName; label: string }[] = [
 ];
 const isEunis = (b: BaseName) => EUNIS_LEVELS.some((l) => l.id === b);
 
+/** Layers the site sheets offer as overlays. CORINE and EUNIS are backgrounds there (BaseSwitch), and "ecosys" is the
+ * terrestrial half of EUNIS level 2, so they are left out: an overlay stays on top of every background. */
+export const SHEET_OVERLAYS = ["n2k", "wet", "riparian", "tree"];
+
 /** EEA and Copernicus layers served through ArcGIS "export", the sources of the Wetland Restoration Hub. */
 export const EEA: Record<string, { label: string; short: string; note: string; url: string; op: number; image?: boolean; layers?: string; legend?: string; legendFile?: string }> = {
   // Ecosystem Type Map v3.1 (100 m), the map behind the Restore4Life tools: layer 0 is EUNIS level 1, layer 1 level 2.

@@ -33,7 +33,7 @@ import {
 } from "../content/lw";
 import { Link, pageHref, useRouter } from "../router";
 import { Container } from "../components/primitives";
-import { BaseSwitch, EEA, LwMap, type BaseName } from "../components/lw-map";
+import { BaseSwitch, EEA, LwMap, SHEET_OVERLAYS, type BaseName } from "../components/lw-map";
 import { CatShape } from "../components/lw-shapes";
 import { Bars, Climograph, ClimographLegend, MONTHS, YearBars } from "../components/lw-charts";
 import { Gallery, useLightbox } from "../components/lw-gallery";
@@ -346,7 +346,7 @@ function Habitats({ p, eea, setEea, eeaFail }: { p: LwPoint; eea: string[]; setE
       <Section title="Straturi pe hartă">
         <p className="-mt-1.5 mb-3 text-[13px] text-subtle">Aceleași servicii EEA și Copernicus folosite de Wetland Restoration Hub. Bifați un strat, apoi priviți harta de sus.</p>
         <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-2.5">
-          {Object.entries(EEA).map(([k, cfg]) => (
+          {SHEET_OVERLAYS.map((k) => [k, EEA[k]] as const).map(([k, cfg]) => (
             <label key={k} className="flex cursor-pointer items-start gap-2.5 rounded-[10px] border border-border p-3 text-[14px] hover:border-accent">
               <input type="checkbox" checked={eea.includes(k)} onChange={(e) => setEea(e.target.checked ? [...eea, k] : eea.filter((x) => x !== k))} className="mt-0.5 size-[18px] accent-[#2f7d4f]" />
               <span>
