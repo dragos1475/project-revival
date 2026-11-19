@@ -9,6 +9,30 @@ import { ENTRY_DELAY, INTRO_DURATION, visibleCounts, WELCOME_GROUPS } from '../c
 import { getLang, pick } from '../i18n/core';
 import { explorerHref, hrefIn, Link } from '../router';
 
+// Shared visit counter (Netlify function netlify/functions/visits.mts), used by every copy of the site.
+const VISITS_URL = 'https://lifewatchromania.netlify.app/api/visits';
+// Local development and Lovable previews only read the total, so editing the site does not add visits.
+const countsVisits = (host: string) => !/^(localhost|127\.0\.0\.1|\[::1\])$/.test(host) && !/preview|lovableproject\.com$/.test(host);
+
+// One request per page load, however often the page mounts (React development mode, re-renders, returns).
+let visitRequest: Promise<number | null> | null = null;
+const requestVisits = () =>
+  (visitRequest ??= fetch(VISITS_URL, { method: countsVisits(location.hostname) ? 'POST' : 'GET' })
+    .then(r => (r.ok ? r.json() : null))
+    .then(d => (typeof d?.count === 'number' ? d.count : null))
+    .catch(() => null));
+
+/** Adds this page load to the visit counter and returns the total, or null until it is known. */
+function useVisits() {
+  const [visits, setVisits] = useState<number | null>(null);
+  useEffect(() => {
+    let live = true;
+    requestVisits().then(n => { if (live) setVisits(n); });
+    return () => { live = false; };
+  }, []);
+  return visits;
+}
+
 const PHOTOS = [sitePhoto('47c58b77'), sitePhoto('00c041bf'), sitePhoto('9dcd0bec')];
 
 export default function WelcomePage() {
@@ -18,6 +42,7 @@ export default function WelcomePage() {
   const [reduced, setReduced] = useState(false);
   const [run, setRun] = useState(0);
   const root = useRef<HTMLElement>(null);
+  const visits = useVisits();
   const complete = elapsed >= INTRO_DURATION;
   const counts = visibleCounts(elapsed);
 
@@ -90,7 +115,7 @@ export default function WelcomePage() {
       <div className="welcome-stats" aria-label={pick('Rețeaua în cifre', 'Network in numbers')}>{WELCOME_GROUPS.map((g, i) => <div key={g.label}><span className="welcome-stat-value">{String(counts[i]).padStart(2, '0')}</span><span>{pick(g.label, g.en)}</span></div>)}</div>
       <footer className="welcome-stage-footer">
         <div className="welcome-caption"><span className="welcome-caption-line" /><div><p data-no-tr>{PHOTOS[photo].alt}</p><span data-no-tr>© {PHOTOS[photo].credit}</span></div></div>
-        <div className="welcome-photo-controls"><span>{String(photo + 1).padStart(2, '0')} <span>/ {String(PHOTOS.length).padStart(2, '0')}</span></span>{!reduced && <Button variant="ghost" size="icon" className="welcome-icon" onClick={() => setPaused(p => !p)} aria-label={paused ? pick('Pornește fotografiile', 'Play photos') : pick('Oprește fotografiile', 'Pause photos')} title={paused ? pick('Pornește fotografiile', 'Play photos') : pick('Oprește fotografiile', 'Pause photos')}>{paused ? <Play /> : <Pause />}</Button>}</div>
+        <div className="welcome-photo-controls">{visits !== null && <span className="welcome-visits" aria-live="polite"><b>{visits.toLocaleString(getLang() === 'ro' ? 'ro-RO' : 'en-GB')}</b> {pick('vizite', 'visits')}</span>}<span>{String(photo + 1).padStart(2, '0')} <span>/ {String(PHOTOS.length).padStart(2, '0')}</span></span>{!reduced && <Button variant="ghost" size="icon" className="welcome-icon" onClick={() => setPaused(p => !p)} aria-label={paused ? pick('Pornește fotografiile', 'Play photos') : pick('Oprește fotografiile', 'Pause photos')} title={paused ? pick('Pornește fotografiile', 'Play photos') : pick('Oprește fotografiile', 'Pause photos')}>{paused ? <Play /> : <Pause />}</Button>}</div>
       </footer>
     </section>
     <section className="welcome-partners" aria-label={pick('Instituții și rețele partenere', 'Partner institutions and networks')}>
