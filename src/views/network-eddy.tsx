@@ -43,8 +43,11 @@ export default function NetworkEddy({ route }: ViewProps) {
   const stations = networks.data?.ec.features ?? [];
   const featureOf = (id: string) => stations.find((f) => f.properties.dataId === id) ?? null;
 
-  // ltser opens the picker at 12:00 on the last day with at least two stations.
-  const range = useAsync(() => ltser.ecRange(paramId), []);
+  // ltser opens the picker at 12:00 on the last day with at least two stations (one for a single-station variable).
+  const range = useAsync(() => ltser.ecRange(paramId), [paramId]);
+  // Station names are upper case in ec.geojson (ENISALA); show them as words.
+  const nameOf = (id: string) => (featureOf(id)?.properties.name ?? id).toLowerCase().replace(/(^|[\s-])\p{L}/gu, (c) => c.toUpperCase());
+  const onlyAt = param.stations?.map(nameOf).join(", ");
   useEffect(() => {
     if (range.data && !time) setTime(clampWall(`${range.data.latest.slice(0, 10)}T12:00`, range.data.min, range.data.max));
   }, [range.data, time]);
@@ -135,6 +138,7 @@ export default function NetworkEddy({ route }: ViewProps) {
                   <TimeStepper value={time} min={range.data?.min} max={range.data?.max} stepMinutes={30} onChange={setTime} />
                 </Field>
                 {range.error || snapshot.error ? <Callout tone="error" title={t("error.load")}>{errorText(range.error ?? snapshot.error, t)}</Callout> : null}
+                {onlyAt ? <Callout tone="info">{t("ec.onlyAt", { names: onlyAt })}</Callout> : null}
                 {!snapshot.loading && snapshot.data && !rows.length ? <Callout tone="info">{t("ec.noStations")}</Callout> : null}
               </CardBody>
             </Card>

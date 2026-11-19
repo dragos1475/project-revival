@@ -161,7 +161,7 @@ const ro: Record<string, string> = {
   "ws.dataId": "cod în date",
 
   "ec.title": "Eddy covariance",
-  "ec.lede": "Fluxuri de CO₂, apă și energie la rezoluție semi-orară. Selectați o stație pentru seria pe 7 zile și pentru imaginea camerei fenologice.",
+  "ec.lede": "Fluxuri de CO₂, apă și energie la rezoluție semi-orară, plus fluxul de metan la Enisala. Selectați o stație pentru seria pe 7 zile și pentru imaginea camerei fenologice.",
   "ec.parameter": "Parametru",
   "ec.station": "Stația selectată",
   "ec.view": "Vizualizare",
@@ -173,6 +173,7 @@ const ro: Record<string, string> = {
   "ec.cameraDemo": "Imaginile camerelor vin din backend-ul LTSER și nu există în modul demonstrativ.",
   "ec.cameraHint": "Imaginea corespunde stației și momentului alese.",
   "ec.noStations": "Nicio stație nu are date la momentul ales.",
+  "ec.onlyAt": "Doar stația {names} măsoară această variabilă, așa că celelalte stații nu apar pe hartă.",
 
   "meta.title": "Metadatele rețelelor",
   "meta.lede": "Cele șase rețele de măsurare LifeWatch: unde sunt instalate, ce măsoară și cum arată fiecare amplasament.",
@@ -472,7 +473,7 @@ const en: Record<string, string> = {
   "ws.dataId": "data code",
 
   "ec.title": "Eddy covariance",
-  "ec.lede": "CO₂, water and energy fluxes at half-hourly resolution. Select a station for its 7 day series and its phenology camera image.",
+  "ec.lede": "CO₂, water and energy fluxes at half-hourly resolution, plus the methane flux at Enisala. Select a station for its 7 day series and its phenology camera image.",
   "ec.parameter": "Parameter",
   "ec.station": "Selected station",
   "ec.view": "View",
@@ -484,6 +485,7 @@ const en: Record<string, string> = {
   "ec.cameraDemo": "Camera images come from the LTSER backend and are not available in demo mode.",
   "ec.cameraHint": "The image matches the chosen station and time.",
   "ec.noStations": "No station has data at the chosen time.",
+  "ec.onlyAt": "Only the {names} station measures this variable, so the other stations are not on the map.",
 
   "meta.title": "Network metadata",
   "meta.lede": "The six LifeWatch measurement networks: where they are installed, what they measure and what each site looks like.",

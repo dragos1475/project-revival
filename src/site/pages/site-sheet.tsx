@@ -23,7 +23,9 @@ import {
   customPoint,
   LTSER_URL,
   NETS,
+  NET_EC_CH4,
   apiStationId,
+  measuresCh4,
   placeText,
   STATION_SLUG,
   type LwClimate,
@@ -703,7 +705,7 @@ function SensorNetwork({ p }: { p: LwPoint }) {
             {l.nets.map((n) => (
               <tr key={n} className="align-top">
                 <td className="border-b border-border px-2.5 py-2 font-semibold whitespace-nowrap">{NETS[n].t}</td>
-                <td className="border-b border-border px-2.5 py-2 text-muted">{NETS[n].d}</td>
+                <td className="border-b border-border px-2.5 py-2 text-muted">{n === "ec" && measuresCh4(p) ? NET_EC_CH4 : NETS[n].d}</td>
               </tr>
             ))}
           </tbody>
@@ -734,7 +736,10 @@ function Networks({ p }: { p: LwPoint }) {
       {p.ltser ? <SensorNetwork p={p} /> : null}
       {p.cat === "icos" && p.deims ? (
         <Note className="mb-5">
-          <b>Stație de flux ecosistemic.</b> Turnul de covarianță turbulentă măsoară schimburile de CO₂, vapori de apă și energie dintre ecosistem și atmosferă. Datele validate se publică prin ICOS Carbon Portal.
+          <b>Stație de flux ecosistemic.</b>{" "}
+          {measuresCh4(p)
+            ? "Turnul de covarianță turbulentă măsoară schimburile de CO₂, metan, vapori de apă și energie dintre ecosistem și atmosferă; metanul este măsurat cu un analizor LI-7700. Datele validate se publică prin ICOS Carbon Portal."
+            : "Turnul de covarianță turbulentă măsoară schimburile de CO₂, vapori de apă și energie dintre ecosistem și atmosferă. Datele validate se publică prin ICOS Carbon Portal."}
         </Note>
       ) : null}
       {p.cat === "icos-cat" ? (
@@ -838,7 +843,7 @@ function DataApi({ p }: { p: LwPoint }) {
     (apiId
       ? [
           `API LifeWatch România, ultimele măsurători ale stației ${p.ltser!.code}`,
-          `curl "https://[domeniu-api-lifewatch]/stations/${apiId}/measurements?${p.cat === "icos" ? "variables=co2_molar_fraction&variables=h2o_molar_fraction" : "variables=air_temperature&variables=air_humidity"}"`,
+          `curl "https://[domeniu-api-lifewatch]/stations/${apiId}/measurements?${p.cat === "icos" ? `variables=co2_molar_fraction&variables=h2o_molar_fraction${measuresCh4(p) ? "&variables=ch4_molar_fraction" : ""}` : "variables=air_temperature&variables=air_humidity"}"`,
         ]
       : ["API LifeWatch România, lista stațiilor din teren", `curl "https://[domeniu-api-lifewatch]/stations"`]) as [string, string],
   ];

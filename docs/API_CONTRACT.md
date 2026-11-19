@@ -153,7 +153,11 @@ pairs the groups like `utils/subset_param.R` (`tm`+`ws`, `ps`+`hu`, `ts`+`ir`, `
 
 Source: `www/data/parquet/ec/` with columns `id`, `time_eet`, `variable`, `values`.
 Variables follow `select_input_ec_halfhourly.csv`: `co2_flux`, `LE`, `H`, `ET`,
-`RN_1_1_1`, `RH_1_1_1`, `PPFD_1_1_1`.
+`RN_1_1_1`, `RH_1_1_1`, `PPFD_1_1_1`, plus `ch4_flux` (methane flux, µmol/m²s, the EddyPro
+column of the same name). Only Enisala measures methane (LI-7700 analyser, `has_ch4` in the
+LifeWatch database, "eddy covariance CO2/CH4" in `ec.geojson`); the Shiny colour function
+already handles `ch4_flux`, but the select list never offered it. For `ch4_flux` the other
+stations are simply absent from the snapshot, or answer `null`.
 
 ### `GET /eddy-covariance/halfhourly/range?variable=..`
 
@@ -161,7 +165,8 @@ Variables follow `select_input_ec_halfhourly.csv`: `co2_flux`, `LE`, `H`, `ET`,
 { "min": "2024-03-15T00:00:00", "max": "2024-11-03T23:30:00", "latest": "2024-11-03T23:30:00" }
 ```
 
-`latest` is the last time with at least two stations. The picker opens at 12:00 that day.
+`latest` is the last time with at least two stations, or with at least one station for a
+variable that only one station measures (`ch4_flux`). The picker opens at 12:00 that day.
 
 ### `GET /eddy-covariance/halfhourly/snapshot?variable=..&time=..`
 

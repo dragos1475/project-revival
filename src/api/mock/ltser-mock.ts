@@ -185,6 +185,12 @@ function ecValue(s: StationSite, variable: string, wallMs: number) {
   const le = Math.max(-12, evapFrac * rn * 0.9 + n(3, 12));
   switch (variable) {
     case "co2_flux": return round(reco - gpp + n(1, 1.3), 2);
+    // Wetland methane emission: rises with temperature and the growing season, small daytime peak, never far below zero.
+    case "ch4_flux": {
+      if (!EC_ONLY.ch4_flux.includes(s.id)) return null;
+      const day = w.sinEl > 0 ? 1 + 0.25 * w.sinEl : 1;
+      return round(Math.max(-0.004, (0.012 + 0.16 * growth) * Math.pow(2, (w.temp - 15) / 10) * day + n(11, 0.012)), 4);
+    }
     case "LE": return round(le, 1);
     case "H": return round((1 - evapFrac) * rn * 0.9 + n(5, 14), 1);
     case "ET": return round(Math.max(-0.02, le * 0.001467), 3);
@@ -194,6 +200,9 @@ function ecValue(s: StationSite, variable: string, wallMs: number) {
     default: return null;
   }
 }
+
+/** Variables measured at only some stations; the others answer null. Mirrors EcParam.stations in lib/catalog.ts. */
+const EC_ONLY: Record<string, string[]> = { ch4_flux: ["enisala"] };
 
 const ecBounds = () => ({ min: wallToMs("2024-03-15T00:00"), max: todayUtc() - 30 * 60000, step: 30 * 60000 });
 
@@ -332,14 +341,18 @@ export const ltserMock = {
     return rows;
   },
 
-  async ecRange(): Promise<TimeRange> {
+  async ecRange(variable: string): Promise<TimeRange> {
     await delay(80);
     const { ec } = await getSites();
     const b = ecBounds();
+    // Last time with at least two stations, or with the station itself for a variable that only one station measures.
+    const only = EC_ONLY[variable];
+    const measuring = only ? ec.filter((s) => only.includes(s.id)) : ec;
+    const need = Math.min(2, measuring.length);
     let latest = b.max;
     for (let k = 0; k < 400; k++) {
       const ms = b.max - k * b.step;
-      if (ec.filter((s) => isAvailable(s, ms)).length >= 2) {
+      if (measuring.filter((s) => isAvailable(s, ms)).length >= need) {
         latest = ms;
         break;
       }

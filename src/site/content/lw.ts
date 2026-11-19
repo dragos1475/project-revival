@@ -154,6 +154,11 @@ export const apiStationId = (p: LwPoint) => {
   const i = p.ltser ? API_STATIONS.indexOf(p.ltser.code) : -1;
   return i < 0 ? null : i + 1;
 };
+/** Network codes of the stations with a LI-7700 methane analyser (has_ch4 in the LifeWatch database). */
+const CH4_STATIONS = ["ENISALA"];
+export const measuresCh4 = (p: LwPoint) => !!p.ltser && CH4_STATIONS.includes(p.ltser.code);
+/** Eddy covariance description for a station that also measures methane. */
+export const NET_EC_CH4 = "fluxurile de CO₂ și de metan, căldură latentă și sensibilă, evapotranspirația și radiația netă, la jumătate de oră";
 export const LTSER_NETS = DATA.ltserNets;
 export const NETS: Record<NetCode, { t: string; d: string }> = {
   ws: { t: "Stație meteo", d: "temperatura și umiditatea aerului, vântul, presiunea, precipitațiile, radiația globală, temperatura și umiditatea solului" },

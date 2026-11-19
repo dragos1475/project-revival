@@ -22,6 +22,8 @@ export interface EcParam extends Labelled {
   unitEn?: string;
   defRo: string;
   defEn: string;
+  /** Data ids of the only stations that measure this variable (all stations when absent). */
+  stations?: string[];
 }
 export interface Network extends Labelled {
   id: "ws" | "ec" | "cu" | "ra" | "co" | "bu";
@@ -106,6 +108,8 @@ export function meteoGroupOf(id: string) {
 
 export const EC_PARAMS: EcParam[] = [
   { id: "co2_flux", unit: "µmol/m²s", ro: "Flux de CO₂", en: "CO₂ flux", defRo: "Fluxul net de CO₂ dintre ecosistem și atmosferă", defEn: "CO₂ flux" },
+  // Only Enisala carries a LI-7700 methane analyser (ec.geojson: "eddy covariance CO2/CH4"; has_ch4 in the LifeWatch database).
+  { id: "ch4_flux", unit: "µmol/m²s", ro: "Flux de CH₄", en: "CH₄ flux", defRo: "Fluxul net de metan dintre ecosistem și atmosferă, măsurat cu analizorul LI-7700", defEn: "Net methane flux between the ecosystem and the atmosphere, measured with the LI-7700 analyser", stations: ["enisala"] },
   { id: "LE", unit: "W/m²", ro: "Flux de căldură latentă", en: "Latent heat flux", defRo: "Flux de căldură latentă corectat", defEn: "Corrected latent heat flux" },
   { id: "H", unit: "W/m²", ro: "Flux de căldură sensibilă", en: "Sensible heat flux", defRo: "Flux de căldură sensibilă corectat", defEn: "Corrected sensible heat flux" },
   { id: "ET", unit: "mm/oră", unitEn: "mm/hour", ro: "Evapotranspirație", en: "Evapotranspiration", defRo: "Fluxul de evapotranspirație", defEn: "Evapotranspiration flux" },
