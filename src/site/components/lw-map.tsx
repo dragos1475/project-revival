@@ -11,7 +11,7 @@ import { pageHref, useRouter } from "../router";
 import { isEn, t } from "../i18n/core";
 import { shapeSvg } from "./lw-shapes";
 
-export type BaseName = "osm" | "sat" | "topo" | "vector" | "clc" | "eunis1";
+export type BaseName = "osm" | "sat" | "topo" | "vector" | "clc" | "eunis1" | "eunis2";
 export const BASES: { id: BaseName; label: string }[] = [
   { id: "osm", label: "Hartă" },
   { id: "sat", label: "Satelit" },
@@ -21,12 +21,21 @@ export const BASES: { id: BaseName; label: string }[] = [
 /** Thematic EEA maps offered as backgrounds in the data sheets, with a legend. */
 export const THEMATIC_BASES: { id: BaseName; label: string }[] = [
   { id: "clc", label: "CORINE 2018" },
-  { id: "eunis1", label: "EUNIS nivel 1" },
+  { id: "eunis1", label: "EUNIS" },
 ];
+/** EUNIS levels of the EEA Ecosystem Type Map v3.1; the "EUNIS" background switches between them. */
+export const EUNIS_LEVELS: { id: BaseName; label: string }[] = [
+  { id: "eunis1", label: "Nivel 1" },
+  { id: "eunis2", label: "Nivel 2" },
+];
+const isEunis = (b: BaseName) => EUNIS_LEVELS.some((l) => l.id === b);
 
 /** EEA and Copernicus layers served through ArcGIS "export", the sources of the Wetland Restoration Hub. */
-export const EEA: Record<string, { label: string; short: string; note: string; url: string; op: number; image?: boolean; legend?: string }> = {
-  eunis1: { label: "EUNIS nivel 1 (EEA v2.1)", short: "EUNIS nivel 1", note: "Hartă a ecosistemelor pe clase EUNIS de nivel 1, rezoluție 1 km", url: "https://bio.discomap.eea.europa.eu/arcgis/rest/services/Ecosystem/EcosystemMap_el1_1km_v2_1/MapServer/export", op: 0.7, legend: "eunis1" },
+export const EEA: Record<string, { label: string; short: string; note: string; url: string; op: number; image?: boolean; layers?: string; legend?: string; legendFile?: string }> = {
+  // Ecosystem Type Map v3.1 (100 m), the map behind the Restore4Life tools: layer 0 is EUNIS level 1, layer 1 level 2.
+  // Legends: public/data/eunis-legends.json, built by scripts/eunis_legends.py.
+  eunis1: { label: "EUNIS nivel 1 (EEA v3.1)", short: "EUNIS nivel 1", note: "Hartă a ecosistemelor pe clase EUNIS de nivel 1, rezoluție 100 m", url: "https://bio.discomap.eea.europa.eu/arcgis/rest/services/Ecosystem/EcosystemTypeMap_v3_1_FullMap/MapServer/export", layers: "show:0", op: 0.7, legend: "eunis1", legendFile: "data/eunis-legends.json" },
+  eunis2: { label: "EUNIS nivel 2 (EEA v3.1)", short: "EUNIS nivel 2", note: "Hartă a ecosistemelor pe clase EUNIS de nivel 2, rezoluție 100 m", url: "https://bio.discomap.eea.europa.eu/arcgis/rest/services/Ecosystem/EcosystemTypeMap_v3_1_FullMap/MapServer/export", layers: "show:1", op: 0.7, legend: "eunis2", legendFile: "data/eunis-legends.json" },
   n2k: { label: "Situri Natura 2000", short: "Situri Natura 2000", note: "SCI/SAC și SPA, baza de date EEA", url: "https://bio.discomap.eea.europa.eu/arcgis/rest/services/ProtectedSites/Natura2000Sites/MapServer/export", op: 0.6 },
   ecosys: { label: "Tipuri de ecosisteme (EEA v3.1)", short: "Tipuri de ecosisteme", note: "Hartă modelată a ecosistemelor terestre, ~100 m", url: "https://bio.discomap.eea.europa.eu/arcgis/rest/services/Ecosystem/EcosystemTypeMap_v3_1_Terrestrial/MapServer/export", op: 0.65 },
   wet: { label: "Apă și umiditate (HRL 2018)", short: "Apă și umiditate", note: "Copernicus High Resolution Layer, 20 m", url: "https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_WaterWetness_2018/ImageServer/exportImage", op: 0.75, image: true },
@@ -77,6 +86,9 @@ interface LegendEntry {
   l: string;
   l_en?: string;
   img: string;
+  /** Group heading (EUNIS level 1 class of a level 2 entry). */
+  g?: string;
+  g_en?: string;
 }
 
 export interface LwMapProps {
@@ -136,6 +148,8 @@ export function LwMap(props: LwMapProps) {
   const onMapClickRef = useRef(onMapClick);
   onMapClickRef.current = onMapClick;
   const [legend, setLegend] = useState<{ title: string; items: LegendEntry[] } | null>(null);
+  // On phones the legend starts closed, so it does not cover the map; one tap opens it.
+  const [legendOpen] = useState(() => typeof window === "undefined" || window.matchMedia("(min-width: 640px)").matches);
 
   // Create the map and the point layers once.
   useEffect(() => {
@@ -289,7 +303,7 @@ export function LwMap(props: LwMapProps) {
     setLegend(null);
     const thematic = EEA[base];
     if (thematic) {
-      const layer = eeaLayer(s, thematic.url, 0.9, (ok) => {
+      const layer = eeaLayer(s, thematic.url, 0.9, thematic.layers, (ok) => {
         if (!ok) setStatus(isEn() ? `The “${t(thematic.label)}” map comes from the EEA servers and cannot be loaded now. The simple map is still available.` : `Harta „${thematic.label}” vine de la serverele EEA și nu se poate încărca acum. Harta simplă rămâne disponibilă.`);
       });
       layer.addTo(s.map);
@@ -297,7 +311,7 @@ export function LwMap(props: LwMapProps) {
       if (!s.map.attributionControl.getContainer()?.textContent?.includes("EEA")) s.map.attributionControl.addAttribution("© EEA / Copernicus Land Monitoring Service");
       if (thematic.legend) {
         let gone = false;
-        loadJson<Record<string, LegendEntry[]>>("data/lw-legends.json").then((all) => {
+        loadJson<Record<string, LegendEntry[]>>(thematic.legendFile ?? "data/lw-legends.json").then((all) => {
           const items = all?.[thematic.legend!];
           if (!gone && items) setLegend({ title: t(thematic.label), items });
         });
@@ -344,7 +358,7 @@ export function LwMap(props: LwMapProps) {
     for (const key of eea) {
       if (s.eea[key] || !EEA[key]) continue;
       const cfg = EEA[key];
-      const group = eeaLayer(s, cfg.url, cfg.op, (ok) => onEeaRef.current?.(key, ok));
+      const group = eeaLayer(s, cfg.url, cfg.op, cfg.layers, (ok) => onEeaRef.current?.(key, ok));
       group.addTo(map);
       s.eea[key] = group;
     }
@@ -384,13 +398,16 @@ export function LwMap(props: LwMapProps) {
       <div ref={el} role="region" aria-label={label} className="absolute inset-0" />
       {status ? <div className="absolute top-3 right-14 z-[500] max-w-[300px] rounded-lg bg-surface/95 px-2.5 py-1.5 text-[12px] text-subtle shadow-card">{status}</div> : null}
       {legend ? (
-        <details open className="absolute right-2.5 bottom-6 z-[500] max-h-[calc(100%-60px)] max-w-[260px] overflow-auto rounded-lg bg-surface/95 px-2.5 py-2 text-[12px] shadow-card max-sm:[&:not([open])]:w-fit">
+        <details open={legendOpen} className="absolute right-2.5 bottom-6 z-[500] max-h-[calc(100%-60px)] max-w-[260px] overflow-auto rounded-lg bg-surface/95 px-2.5 py-2 text-[12px] shadow-card max-sm:[&:not([open])]:w-fit">
           <summary className="cursor-pointer font-semibold">{isEn() ? "Legend" : "Legendă"} · {legend.title}</summary>
           <ul className="mt-1.5 grid gap-1">
-            {legend.items.map((e) => (
-              <li key={e.l} className="flex items-center gap-2">
-                <img src={e.img} alt="" width={16} height={16} className="size-4 shrink-0 rounded-[3px]" />
-                <span>{isEn() && e.l_en ? e.l_en : e.l}</span>
+            {legend.items.map((e, i) => (
+              <li key={e.l} className="contents">
+                {e.g && e.g !== legend.items[i - 1]?.g ? <span className="mt-1.5 block text-[11px] font-semibold tracking-[0.04em] text-subtle uppercase first:mt-0">{isEn() && e.g_en ? e.g_en : e.g}</span> : null}
+                <span className="flex items-center gap-2">
+                  <img src={e.img} alt="" width={16} height={16} className="size-4 shrink-0 rounded-[3px]" />
+                  <span>{isEn() && e.l_en ? e.l_en : e.l}</span>
+                </span>
               </li>
             ))}
           </ul>
@@ -401,7 +418,7 @@ export function LwMap(props: LwMapProps) {
 }
 
 /** An EEA ArcGIS "export" image that follows the map view. */
-function eeaLayer(s: MapState, url: string, opacity: number, onResult: (ok: boolean) => void) {
+function eeaLayer(s: MapState, url: string, opacity: number, layers: string | undefined, onResult: (ok: boolean) => void) {
   const { L, map } = s;
   const img = L.imageOverlay("data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==", map.getBounds(), { opacity, interactive: false });
   const refresh = () => {
@@ -409,7 +426,7 @@ function eeaLayer(s: MapState, url: string, opacity: number, onResult: (ok: bool
     const size = map.getSize();
     const sw = L.CRS.EPSG3857.project(b.getSouthWest());
     const ne = L.CRS.EPSG3857.project(b.getNorthEast());
-    img.setUrl(`${url}?bbox=${[sw.x, sw.y, ne.x, ne.y].map(Math.round).join(",")}&bboxSR=3857&imageSR=3857&size=${size.x},${size.y}&format=png32&transparent=true&f=image`);
+    img.setUrl(`${url}?bbox=${[sw.x, sw.y, ne.x, ne.y].map(Math.round).join(",")}&bboxSR=3857&imageSR=3857&size=${size.x},${size.y}&format=png32&transparent=true${layers ? `&layers=${encodeURIComponent(layers)}` : ""}&f=image`);
     img.setBounds(b);
   };
   const group = L.layerGroup([img]);
@@ -423,24 +440,42 @@ function eeaLayer(s: MapState, url: string, opacity: number, onResult: (ok: bool
   return group;
 }
 
-/** Segmented choice of the map background. */
+const switchButton =
+  "h-8 rounded-md border border-border-strong bg-surface px-3 text-[13px] font-semibold text-navy transition-colors hover:bg-surface-2 aria-pressed:border-navy aria-pressed:bg-navy aria-pressed:text-white dark:text-foreground dark:aria-pressed:border-lime dark:aria-pressed:bg-lime dark:aria-pressed:text-navy";
+
+/** Segmented choice of the map background. With `thematic`, "EUNIS" adds a level 1 / level 2 switch. */
 export function BaseSwitch({ value, onChange, className, floating, thematic }: { value: BaseName; onChange: (b: BaseName) => void; className?: string; floating?: boolean; thematic?: boolean }) {
+  const lastLevel = useRef<BaseName>("eunis1");
+  if (isEunis(value)) lastLevel.current = value;
+  const shadow = floating && "shadow-[0_1px_4px_rgba(0,0,0,0.2)]";
   return (
-    <div role="group" aria-label="Fundalul hărții" className={cn("flex flex-wrap gap-1.5", className)}>
-      {(thematic ? [...BASES, ...THEMATIC_BASES] : BASES).map((b) => (
-        <button
-          key={b.id}
-          type="button"
-          aria-pressed={value === b.id}
-          onClick={() => onChange(b.id)}
-          className={cn(
-            "h-8 rounded-md border border-border-strong bg-surface px-3 text-[13px] font-semibold text-navy transition-colors hover:bg-surface-2 aria-pressed:border-navy aria-pressed:bg-navy aria-pressed:text-white dark:text-foreground dark:aria-pressed:border-lime dark:aria-pressed:bg-lime dark:aria-pressed:text-navy",
-            floating && "shadow-[0_1px_4px_rgba(0,0,0,0.2)]",
-          )}
-        >
-          {b.label}
-        </button>
-      ))}
+    <div role="group" aria-label={t("Fundalul hărții")} className={cn("flex flex-wrap gap-1.5", className)}>
+      {(thematic ? [...BASES, ...THEMATIC_BASES] : BASES).map((b) => {
+        const eunis = b.id === "eunis1";
+        const pressed = eunis ? isEunis(value) : value === b.id;
+        return (
+          <span key={b.id} className="contents">
+            <button type="button" aria-pressed={pressed} onClick={() => onChange(eunis ? lastLevel.current : b.id)} className={cn(switchButton, shadow)}>
+              {t(b.label)}
+            </button>
+            {eunis && pressed ? (
+              <span role="group" aria-label={t("Nivelul EUNIS")} className={cn("flex h-8 overflow-hidden rounded-md border border-border-strong bg-surface", shadow)}>
+                {EUNIS_LEVELS.map((l) => (
+                  <button
+                    key={l.id}
+                    type="button"
+                    aria-pressed={value === l.id}
+                    onClick={() => onChange(l.id)}
+                    className="px-2.5 text-[12.5px] font-semibold text-navy transition-colors not-first:border-l not-first:border-border-strong hover:bg-surface-2 aria-pressed:bg-navy/10 aria-pressed:text-navy dark:text-foreground dark:aria-pressed:bg-lime/20 dark:aria-pressed:text-lime"
+                  >
+                    {t(l.label)}
+                  </button>
+                ))}
+              </span>
+            ) : null}
+          </span>
+        );
+      })}
     </div>
   );
 }

@@ -1,5 +1,14 @@
 {
 "dict": {
+"EUNIS": "EUNIS",
+"EUNIS nivel 1 (EEA v3.1)": "EUNIS level 1 (EEA v3.1)",
+"EUNIS nivel 2 (EEA v3.1)": "EUNIS level 2 (EEA v3.1)",
+"EUNIS nivel 2": "EUNIS level 2",
+"Hartă a ecosistemelor pe clase EUNIS de nivel 1, rezoluție 100 m": "Ecosystem map by EUNIS level 1 classes, 100 m resolution",
+"Hartă a ecosistemelor pe clase EUNIS de nivel 2, rezoluție 100 m": "Ecosystem map by EUNIS level 2 classes, 100 m resolution",
+"Nivel 1": "Level 1",
+"Nivel 2": "Level 2",
+"Nivelul EUNIS": "EUNIS level",
 "Persoană de contact": "Contact person",
 "Email stațiune": "Station email",
 "API LifeWatch România, lista stațiilor din teren": "LifeWatch Romania API, list of field stations",
