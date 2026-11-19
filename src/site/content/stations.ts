@@ -29,6 +29,8 @@ export interface Station {
   address: string;
   phone: string;
   phoneHref: string;
+  /** The station's own email address, shown next to its phone. */
+  email?: string;
   website?: string;
   /** Approximate location of the station, for the atlas and map links. */
   lonLat: [number, number];
@@ -54,6 +56,7 @@ export const STATIONS: Station[] = [
     address: "Str. Ciprian Porumbescu nr. 4, Brăila",
     phone: "0239 670 046",
     phoneHref: "tel:+40239670046",
+    email: "statiunea.braila@gmail.com",
     lonLat: [27.9575, 45.2692],
     photo: STATION_PHOTOS.braila,
     facts: [

@@ -252,7 +252,7 @@ function Institutions() {
   return (
     <section aria-label="Instituții" className="border-t border-border bg-background">
       <Container className="flex flex-wrap items-center justify-between gap-x-12 gap-y-5 py-7">
-        <p className="max-w-[560px] text-[15px] leading-[1.55]">LifeWatch România este infrastructura de cercetare colocată LifeWatch, eLTER, ICOS și MIRRI a Universității din București. Stațiunile de la Brăila și Sinaia sunt coordonate de Centrul de Cercetare în Ecologie Sistemică și Sustenabilitate (RCSES) de la Facultatea de Biologie.</p>
+        <p className="max-w-[560px] text-[15px] leading-[1.55]">LifeWatch România este infrastructura de cercetare colocată LifeWatch, eLTER și ICOS a Universității din București. Stațiunile de la Brăila și Sinaia sunt coordonate de Centrul de Cercetare în Ecologie Sistemică și Sustenabilitate (RCSES) de la Facultatea de Biologie.</p>
         <div className="flex flex-wrap items-center gap-4 rounded-xl bg-white px-4 py-3">
           <a href="https://unibuc.ro/" target="_blank" rel="noreferrer">
             <img src={asset(LOGOS.ub.src)} alt={LOGOS.ub.alt} width={259} height={58} className="h-[52px] w-auto" />

@@ -1,7 +1,7 @@
-// Contact: address and phone of each station, with copy buttons and map links.
-import { ArrowRight, MapPin, Phone } from "lucide-react";
+// Contact: contact person, email, address and phone of each station, with copy buttons and map links.
+import { ArrowRight, Mail, MapPin, Phone, User } from "lucide-react";
 import { STATIONS } from "../content/stations";
-import { ORG } from "../content/org";
+import { CONTACT, ORG } from "../content/org";
 import { Link } from "../router";
 import { CopyValue, CreditedPhoto } from "../components/blocks";
 import { Container, ExternalLink, PageIntro } from "../components/primitives";
@@ -11,7 +11,7 @@ const osm = ([lon, lat]: [number, number]) => `https://www.openstreetmap.org/?ml
 export default function ContactPage() {
   return (
     <>
-      <PageIntro eyebrow="Stații de cercetare" title="Contact" lede={`Adresele și telefoanele stațiilor de cercetare ale ${ORG.hostGenitive}.`}>
+      <PageIntro eyebrow="Stații de cercetare" title="Contact" lede={`Persoana de contact, adresele și telefoanele stațiilor de cercetare ale ${ORG.hostGenitive}.`}>
         <Link to="intrebari-frecvente" className="group inline-flex items-center gap-1.5 text-[14px] font-medium">
           Întrebări frecvente
           <ArrowRight className="size-3.5 text-subtle transition-transform group-hover:translate-x-0.5 group-hover:text-accent" strokeWidth={1.75} />
@@ -31,6 +31,18 @@ export default function ContactPage() {
                     <p className="text-[13px] text-muted">{s.operator}</p>
                   </div>
                   <dl className="grid gap-2 border-t border-border pt-3 text-[13.5px]">
+                    <div className="flex items-center gap-3">
+                      <dt className="sr-only">Persoană de contact</dt>
+                      <User className="size-4 shrink-0 text-subtle" strokeWidth={1.75} />
+                      <dd data-no-tr>{CONTACT.name}</dd>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <dt className="sr-only">Email</dt>
+                      <Mail className="size-4 shrink-0 text-subtle" strokeWidth={1.75} />
+                      <dd className="min-w-0">
+                        <a href={`mailto:${CONTACT.email}`} className="break-all hover:text-accent" data-no-tr>{CONTACT.email}</a>
+                      </dd>
+                    </div>
                     <div className="flex items-start gap-3">
                       <dt className="sr-only">Adresă</dt>
                       <MapPin className="mt-0.5 size-4 shrink-0 text-subtle" strokeWidth={1.75} />
@@ -48,6 +60,15 @@ export default function ContactPage() {
                         <a href={s.phoneHref} className="tabular hover:text-accent">{s.phone}</a>
                       </dd>
                     </div>
+                    {s.email ? (
+                      <div className="flex items-center gap-3">
+                        <dt className="sr-only">Email stațiune</dt>
+                        <Mail className="size-4 shrink-0 text-subtle" strokeWidth={1.75} />
+                        <dd className="min-w-0">
+                          <a href={`mailto:${s.email}`} className="break-all hover:text-accent" data-no-tr>{s.email}</a>
+                        </dd>
+                      </div>
+                    ) : null}
                     {s.website ? (
                       <div className="flex items-center gap-3 pl-7">
                         <dt className="sr-only">Site web</dt>

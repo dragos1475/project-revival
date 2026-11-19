@@ -93,7 +93,6 @@ export const MENUS: Menu[] = [
       { label: "eLTER RI", note: "Cercetare ecologică pe termen lung", href: "https://elter-ri.eu/" },
       { label: "ICOS", note: "Observarea carbonului", href: "https://www.icos-cp.eu/" },
       { label: "DANUBIUS-RI", note: "Sisteme fluviu–mare", href: "https://www.danubius-ri.eu/" },
-      { label: "MIRRI-ERIC", note: "Resurse microbiene", href: "https://www.mirri.org/" },
       { label: "ENoLL", note: "Living lab-ul de la Brăila", href: "https://enoll.org/member/agrodatasmart/" },
     ],
   },

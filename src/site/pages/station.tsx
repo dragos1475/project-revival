@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { STATIONS, type Station } from "../content/stations";
+import { CONTACT } from "../content/org";
 import { PLATFORMS } from "../content/platforms";
 import { asset, commonName, fmt, lwByKey, meanOf, relatedOf, sheetKey, stationGallery, STATION_POINT } from "../content/lw";
 import { explorerHref, Link, pageHref } from "../router";
@@ -211,17 +212,13 @@ export function StationPage({ station }: { station: Station }) {
             <Fact label="Centrul care coordonează stațiunea" wide>
               {COORD[station.slug]}
             </Fact>
-            {station.slug === "braila" ? (
-              <>
-                <Fact label="Coordonator">Dr. Mihai Adamescu, RCSES</Fact>
-                <Fact label="Contact">
-                  Marius Bujor
-                  <a href="mailto:statiunea.braila@gmail.com" className="block text-[14px] font-normal break-all hover:text-accent" data-no-tr>
-                    statiunea.braila@gmail.com
-                  </a>
-                </Fact>
-              </>
-            ) : null}
+            <Fact label="Coordonator"><span data-no-tr>{CONTACT.coordinator}</span></Fact>
+            <Fact label="Contact">
+              <span data-no-tr>{CONTACT.name}</span>
+              <a href={`mailto:${CONTACT.email}`} className="block text-[14px] font-normal break-all hover:text-accent" data-no-tr>
+                {CONTACT.email}
+              </a>
+            </Fact>
             <Fact label="Specii pe iNaturalist">{fmt(p.inat?.species)}</Fact>
             <Fact label="Ocurențe GBIF">{fmt(p.gbif?.occ)}</Fact>
             <Fact label="Situri Natura 2000">{p.n2k?.length ?? 0}</Fact>
@@ -232,6 +229,7 @@ export function StationPage({ station }: { station: Station }) {
               ["Coordonare", station.operator],
               ["Adresă", <CopyValue key="a" value={station.address} label="Adresa" />],
               ["Telefon", <a key="t" href={station.phoneHref} className="tabular hover:text-accent">{station.phone}</a>],
+              ...(station.email ? [["Email", <a key="e" href={`mailto:${station.email}`} className="break-all hover:text-accent" data-no-tr>{station.email}</a>]] : []),
               ...(station.website ? [["Site web", <a key="w" href={station.website} target="_blank" rel="noreferrer" className="hover:text-accent">{station.website.replace(/^https?:\/\//, "").replace(/\/$/, "")}</a>]] : []),
             ].map(([label, value]) => (
               <div key={label as string} className="grid grid-cols-[96px_minmax(0,1fr)] gap-3 border-b border-border py-2.5 last:border-b-0">

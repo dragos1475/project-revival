@@ -6,6 +6,8 @@ import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { asset, LTSER_URL } from "../content/lw";
+import { CONTACT } from "../content/org";
+import { findStation } from "../content/stations";
 import { sitePhoto } from "../content/site-photos";
 import { isEn } from "../i18n/core";
 import { Link } from "../router";
@@ -23,6 +25,18 @@ function Ext({ href, children }: { href: string; children: ReactNode }) {
     <a href={href} target="_blank" rel="noreferrer" className={link}>
       {children} <ArrowUpRight className="size-3.5" strokeWidth={2} />
     </a>
+  );
+}
+
+/** UB page link plus the shared contact person, identical for every station row. */
+function StationLinks({ href, email }: { href: string; email?: string }) {
+  return (
+    <span className="grid gap-1">
+      <Ext href={href}>Pagina UB</Ext>
+      <span className="text-[13.5px]" data-no-tr>{CONTACT.name}</span>
+      <a href={`mailto:${CONTACT.email}`} className="text-[13.5px] break-all hover:text-accent" data-no-tr>{CONTACT.email}</a>
+      {email ? <a href={`mailto:${email}`} className="text-[13.5px] break-all hover:text-accent" data-no-tr>{email}</a> : null}
+    </span>
   );
 }
 
@@ -172,7 +186,7 @@ export default function AccessPage() {
           <div className="grid gap-3">
             <p className="text-[12.5px] font-semibold tracking-[0.1em] text-lime uppercase">Acces</p>
             <h1 className="font-display text-[32px] leading-[1.08] font-bold tracking-[-0.02em] text-balance sm:text-[42px] xl:text-[50px]">Acces la infrastructura LifeWatch România</h1>
-            <p className="max-w-[78ch] text-[16px] leading-[1.65] text-[#CFDCE2] sm:text-[17px]">IC LifeWatch este infrastructura de cercetare colocată LifeWatch, eLTER, ICOS și MIRRI a Universității din București. Laboratoarele, echipamentele, centrul de date și datele ei sunt deschise cercetării și formării, pentru instituții academice, organisme publice și entități private. Pe această pagină găsiți cine răspunde de infrastructură și cum se cere accesul.</p>
+            <p className="max-w-[78ch] text-[16px] leading-[1.65] text-[#CFDCE2] sm:text-[17px]">IC LifeWatch este infrastructura de cercetare colocată LifeWatch, eLTER și ICOS a Universității din București. Laboratoarele, echipamentele, centrul de date și datele ei sunt deschise cercetării și formării, pentru instituții academice, organisme publice și entități private. Pe această pagină găsiți cine răspunde de infrastructură și cum se cere accesul.</p>
           </div>
           <div className="grid gap-3 rounded-xl border border-[#2C5A6E] bg-navy-2 p-5">
             <h3 className="font-display text-[19px] font-bold">Pe scurt</h3>
@@ -220,7 +234,7 @@ export default function AccessPage() {
               <CardBody>
                 <p className="text-[12px] font-semibold tracking-[0.08em] text-accent uppercase">Coordonare</p>
                 <CardTitle>Directorul IC LifeWatch și RCSES</CardTitle>
-                <CardText>Directorul infrastructurii primește și aprobă cererile de acces, împreună cu coordonatorii stațiunilor. Centrul de Cercetare în Ecologie Sistemică și Sustenabilitate (RCSES) coordonează stațiunile de la Brăila și Sinaia și asigură participarea universității în LifeWatch ERIC, eLTER, ICOS și MIRRI-ERIC.</CardText>
+                <CardText>Directorul infrastructurii primește și aprobă cererile de acces, împreună cu coordonatorii stațiunilor. Centrul de Cercetare în Ecologie Sistemică și Sustenabilitate (RCSES) coordonează stațiunile de la Brăila și Sinaia și asigură participarea universității în LifeWatch ERIC, eLTER și ICOS.</CardText>
                 <Ext href="https://rcses.unibuc.ro/">rcses.unibuc.ro</Ext>
               </CardBody>
             </Card>
@@ -238,10 +252,10 @@ export default function AccessPage() {
               min={820}
               head={["Stațiunea", "Centrul de cercetare care o coordonează", "Laboratoare IC LifeWatch", "Legătura"]}
               rows={[
-                [<Link key="b" to="statiuni/braila" className="hover:text-accent hover:underline">Brăila</Link>, "RCSES, Facultatea de Biologie", "Analize ecologice pentru zone umede inundabile, genetică pentru zone umede", <span key="l" className="grid gap-1"><Ext href="https://unibuc.ro/cercetare/statiuni-de-cercetare/statiunea-de-cercetari-de-la-braila/">Pagina UB</Ext><a href="mailto:statiunea.braila@gmail.com" className="text-[13.5px] break-all hover:text-accent" data-no-tr>statiunea.braila@gmail.com</a></span>],
-                [<Link key="s" to="statiuni/sinaia" className="hover:text-accent hover:underline">Sinaia</Link>, "RCSES, Facultatea de Biologie", "Prelevare și precondiționare pentru zone montane, centrul de date cu laboratoare virtuale", <Ext key="l" href="https://unibuc.ro/cercetare/statiuni-de-cercetare/statiunea-zoologica-sinaia/">Pagina UB</Ext>],
-                [<Link key="o" to="statiuni/orsova" className="hover:text-accent hover:underline">Orșova</Link>, "Centrele de cercetare ale facultăților de Geografie, Chimie, Biologie și Geologie, între care Centrul de Degradarea Terenurilor și Dinamică Geomorfologică și Centrul de Studii de Risc, Modelare Spațială și Dinamica Sistemelor Terestre și Costiere", "Probe și date geomatice pentru ecosisteme fluviale, prelevare și precondiționare pentru ape fluviale", <Ext key="l" href="https://unibuc.ro/cercetare/statiuni-de-cercetare/statiunea-de-cercetare-de-la-orsova/">Pagina UB</Ext>],
-                [<Link key="g" to="statiuni/sfantu-gheorghe" className="hover:text-accent hover:underline">Sfântu Gheorghe</Link>, "Facultatea de Geografie, cu Centrul de Cercetări Costiere pentru Protecția Mediului și Centrul de Cercetare de Geologie și Geofizică Ambientală", "Monitorizarea ecosistemelor costiere și deltaice, prelevare și precondiționare pentru zone costiere și deltaice", <Ext key="l" href="https://unibuc.ro/cercetare/statiuni-de-cercetare/statiunea-de-cercetari-de-la-sfantu-gheorghe/">Pagina UB</Ext>],
+                [<Link key="b" to="statiuni/braila" className="hover:text-accent hover:underline">Brăila</Link>, "RCSES, Facultatea de Biologie", "Analize ecologice pentru zone umede inundabile, genetică pentru zone umede", <StationLinks key="l" href="https://unibuc.ro/cercetare/statiuni-de-cercetare/statiunea-de-cercetari-de-la-braila/" email={findStation("braila")?.email} />],
+                [<Link key="s" to="statiuni/sinaia" className="hover:text-accent hover:underline">Sinaia</Link>, "RCSES, Facultatea de Biologie", "Prelevare și precondiționare pentru zone montane, centrul de date cu laboratoare virtuale", <StationLinks key="l" href="https://unibuc.ro/cercetare/statiuni-de-cercetare/statiunea-zoologica-sinaia/" />],
+                [<Link key="o" to="statiuni/orsova" className="hover:text-accent hover:underline">Orșova</Link>, "Centrele de cercetare ale facultăților de Geografie, Chimie, Biologie și Geologie, între care Centrul de Degradarea Terenurilor și Dinamică Geomorfologică și Centrul de Studii de Risc, Modelare Spațială și Dinamica Sistemelor Terestre și Costiere", "Probe și date geomatice pentru ecosisteme fluviale, prelevare și precondiționare pentru ape fluviale", <StationLinks key="l" href="https://unibuc.ro/cercetare/statiuni-de-cercetare/statiunea-de-cercetare-de-la-orsova/" />],
+                [<Link key="g" to="statiuni/sfantu-gheorghe" className="hover:text-accent hover:underline">Sfântu Gheorghe</Link>, "Facultatea de Geografie, cu Centrul de Cercetări Costiere pentru Protecția Mediului și Centrul de Cercetare de Geologie și Geofizică Ambientală", "Monitorizarea ecosistemelor costiere și deltaice, prelevare și precondiționare pentru zone costiere și deltaice", <StationLinks key="l" href="https://unibuc.ro/cercetare/statiuni-de-cercetare/statiunea-de-cercetari-de-la-sfantu-gheorghe/" />],
                 ["Distribuit", "RCSES", "Laboratorul mobil de cercetări sociale, stațiile de flux, cele 20 de stații climatice", <Link key="l" to="infrastructura" hash="retea-teren" className={link}>Lista stațiilor →</Link>],
               ]}
             />

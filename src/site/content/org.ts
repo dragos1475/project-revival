@@ -10,6 +10,13 @@ export const ORG = {
   centerUrl: "https://rcses.unibuc.ro/",
 };
 
+/** The single contact person shown for every station and on the access and contact pages. */
+export const CONTACT = {
+  name: "Mihai Adamescu",
+  coordinator: "Dr. Mihai Adamescu, RCSES",
+  email: "mihaicristian.adamescu@g.unibuc.ro",
+};
+
 export const MISSION = [
   "LifeWatch România construiește și modernizează infrastructura de cercetare în științele vieții a Universității din București, ca nod național al infrastructurilor europene de cercetare.",
   "Stațiile de teren, platformele de monitorizare și centrul de date de la Sinaia sprijină studiul biodiversității și al funcționării ecosistemelor printr-o bază de date comună, instrumente de analiză și programe de formare.",

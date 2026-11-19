@@ -77,7 +77,7 @@ const RO_ROUTES: SiteRoute[] = [
   page("retea", "Rețea și comunitate", "ILTER, LTER-Europe, eLTER și infrastructurile europene de cercetare în care contribuie LifeWatch România.", NetworkPage),
   page("proiecte", "Proiecte", "Proiectele europene și naționale susținute de infrastructura LifeWatch România și stațiunile unde lucrează fiecare.", ProjectsPage),
   page("intrebari-frecvente", "Întrebări frecvente", "Răspunsuri despre infrastructură, platformele LTSER, accesul la date și explorator.", FaqPage),
-  page("contact", "Contact", "Adresele și telefoanele stațiilor de cercetare LifeWatch România.", ContactPage),
+  page("contact", "Contact", "Persoana de contact, adresele și telefoanele stațiilor de cercetare LifeWatch România.", ContactPage),
 ];
 
 export const SITE_ROUTES: SiteRoute[] = [...RO_ROUTES, ...RO_ROUTES.map((r) => ({ ...r, key: keyFor(r.key, "en") }))];

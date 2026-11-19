@@ -1,5 +1,7 @@
 {
 "dict": {
+"Persoană de contact": "Contact person",
+"Email stațiune": "Station email",
 "API LifeWatch România, lista stațiilor din teren": "LifeWatch Romania API, list of field stations",
 "Fără since și until, serviciul întoarce ultimele două ore înregistrate. Cu ele se poate cere un interval de cel mult 7 zile, în format ISO 8601.": "Without since and until, the service returns the last two recorded hours. With them you can request a window of at most 7 days, in ISO 8601 format.",
 "Măsurătorile unei stații se cer apoi cu /stations/{id}/measurements, folosind id-ul din listă.": "A station's measurements are then requested with /stations/{id}/measurements, using the id from the list.",
@@ -9,8 +11,8 @@
 "API de acces la date": "Data access API",
 "Același tip de date se vede și în": "The same kind of data is also shown in",
 "Adresa de bază": "Base address",
-"Adresele și telefoanele stațiilor de cercetare LifeWatch România.": "Addresses and phone numbers of the LifeWatch Romania research stations.",
-"Adresele și telefoanele stațiilor de cercetare ale Universității din București.": "Addresses and phone numbers of the University of Bucharest research stations.",
+"Persoana de contact, adresele și telefoanele stațiilor de cercetare LifeWatch România.": "Contact person, addresses and phone numbers of the LifeWatch Romania research stations.",
+"Persoana de contact, adresele și telefoanele stațiilor de cercetare ale Universității din București.": "Contact person, addresses and phone numbers of the University of Bucharest research stations.",
 "Adresă": "Address",
 "Alinierea infrastructurii românești de cercetare la cea europeană, cu accent pe cooperarea transfrontalieră privind gestionarea capitalului natural și pe cercetarea fundamentală.": "Aligning Romanian research infrastructure with the European one, with a focus on cross-border cooperation on natural capital management and on fundamental research.",
 "Alt sit sau altă stație": "Another site or station",
