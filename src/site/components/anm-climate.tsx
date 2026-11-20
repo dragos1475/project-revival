@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { fmt, meanOf, type LwPoint } from "../content/lw";
 import { pick } from "../i18n/core";
 import { H3, KeyValues } from "./lw-ui";
+import { HoverChart, type Tip } from "./chart-hover";
 
 interface AnmStation {
   name: string;
@@ -55,7 +56,7 @@ const sum = (xs: number[]) => xs.reduce((s, v) => s + v, 0);
 /** Bars above and below a zero line, for anomalies. Missing values leave a gap. */
 function DivergingBars({
   values,
-  titles,
+  tip,
   ticks,
   pos,
   neg,
@@ -65,7 +66,8 @@ function DivergingBars({
   floor,
 }: {
   values: (number | null)[];
-  titles: string[];
+  /** Readout of a column on hover or keyboard focus. */
+  tip: (i: number) => Tip;
   ticks: (string | null)[];
   pos: string;
   neg: string;
@@ -91,57 +93,73 @@ function DivergingBars({
   const bw = iw / values.length;
   const y = (v: number) => T + ((top - v) / (top - bottom)) * ih;
   return (
-    <svg className="block h-auto w-full" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={label}>
-      {[top, 0, bottom].map((v) => (
-        <g key={v}>
-          <line
-            x1={L}
-            x2={W - R}
-            y1={y(v)}
-            y2={y(v)}
-            stroke={v === 0 ? "var(--chart-axis)" : "var(--chart-grid)"}
-            strokeOpacity={v === 0 ? 0.6 : 1}
-          />
-          <text
-            x={L - 6}
-            y={y(v) + 4}
-            fontSize="11"
-            textAnchor="end"
-            fill="var(--chart-axis)"
-          >{`${signed(v, step < 1 ? 1 : 0)}${unit}`}</text>
-        </g>
-      ))}
-      {values.map((v, i) =>
-        v == null ? null : (
-          <rect
-            key={i}
-            x={L + i * bw + bw * 0.12}
-            y={Math.min(y(v), y(0))}
-            width={Math.max(bw * 0.76, 1)}
-            height={Math.max(Math.abs(y(v) - y(0)), 0.5)}
-            rx={bw > 6 ? 2 : 0}
-            fill={v >= 0 ? pos : neg}
-            opacity={faded?.[i] ? 0.45 : 1}
-          >
-            <title>{titles[i]}</title>
-          </rect>
-        ),
+    <HoverChart
+      W={W}
+      H={H}
+      n={values.length}
+      x0={L}
+      bw={bw}
+      label={label}
+      tip={tip}
+      anchorY={(i) => {
+        const v = values[i];
+        return v == null ? y(0) : Math.min(y(v), y(0));
+      }}
+    >
+      {(active) => (
+        <>
+          {[top, 0, bottom].map((v) => (
+            <g key={v}>
+              <line
+                x1={L}
+                x2={W - R}
+                y1={y(v)}
+                y2={y(v)}
+                stroke={v === 0 ? "var(--chart-axis)" : "var(--chart-grid)"}
+                strokeOpacity={v === 0 ? 0.6 : 1}
+              />
+              <text
+                x={L - 6}
+                y={y(v) + 4}
+                fontSize="11"
+                textAnchor="end"
+                fill="var(--chart-axis)"
+              >{`${signed(v, step < 1 ? 1 : 0)}${unit}`}</text>
+            </g>
+          ))}
+          {values.map((v, i) =>
+            v == null ? null : (
+              <rect
+                key={i}
+                x={L + i * bw + bw * 0.12}
+                y={Math.min(y(v), y(0))}
+                width={Math.max(bw * 0.76, 1)}
+                height={Math.max(Math.abs(y(v) - y(0)), 0.5)}
+                rx={bw > 6 ? 2 : 0}
+                fill={v >= 0 ? pos : neg}
+                opacity={faded?.[i] ? 0.45 : 1}
+                stroke={i === active ? "var(--chart-axis)" : undefined}
+                strokeWidth={i === active ? 1.5 : undefined}
+              />
+            ),
+          )}
+          {ticks.map((tk, i) =>
+            tk ? (
+              <text
+                key={i}
+                x={L + i * bw + bw / 2}
+                y={H - 10}
+                fontSize="10.5"
+                textAnchor="middle"
+                fill="var(--chart-axis)"
+              >
+                {tk}
+              </text>
+            ) : null,
+          )}
+        </>
       )}
-      {ticks.map((tk, i) =>
-        tk ? (
-          <text
-            key={i}
-            x={L + i * bw + bw / 2}
-            y={H - 10}
-            fontSize="10.5"
-            textAnchor="middle"
-            fill="var(--chart-axis)"
-          >
-            {tk}
-          </text>
-        ) : null,
-      )}
-    </svg>
+    </HoverChart>
   );
 }
 
@@ -194,8 +212,8 @@ export function AnmClimateContext({ p }: { p: LwPoint }) {
     const pA = isNum(r.p) && pN ? Math.round((r.p / pN - 1) * 100) : null;
     return { ...r, y, m, partial, tA, pA, pN };
   });
-  const label = (x: (typeof months)[number]) =>
-    `${mon[x.m - 1]} ${x.y}${x.partial ? pick(` (până pe ${x.d})`, ` (to the ${x.d}th)`) : ""}`;
+  const longLabel = (x: (typeof months)[number]) =>
+    `${MON_LONG()[x.m - 1]} ${x.y}${x.partial ? pick(`, până pe ${x.d}`, `, to day ${x.d}`) : ""}`;
   const last12 = months.slice(-12);
   const t12 = last12.map((x) => x.tA).filter(isNum);
   const p12 = last12.filter((x) => isNum(x.p) && x.pN && !x.partial);
@@ -288,10 +306,29 @@ export function AnmClimateContext({ p }: { p: LwPoint }) {
       />
       <DivergingBars
         values={months.map((x) => x.tA)}
-        titles={months.map(
-          (x) =>
-            `${label(x)}: ${x.t == null ? pick("fără date", "no data") : `${fmt(x.t, 1)} °C (${signed(x.tA ?? 0)} °C)`}`,
-        )}
+        tip={(i) => {
+          const x = months[i];
+          return {
+            title: longLabel(x),
+            rows: isNum(x.t)
+              ? [
+                  { value: `${fmt(x.t, 1)} °C`, label: pick("media lunii", "monthly mean") },
+                  ...(isNum(x.tA)
+                    ? [
+                        {
+                          value: `${signed(x.tA)} °C`,
+                          label: pick(
+                            `față de normală (${fmt(nT[x.m - 1], 1)} °C)`,
+                            `vs normal (${fmt(nT[x.m - 1], 1)} °C)`,
+                          ),
+                          color: x.tA >= 0 ? "var(--an-warm)" : "var(--an-cold)",
+                        },
+                      ]
+                    : []),
+                ]
+              : [{ value: pick("fără date complete", "no complete data") }],
+          };
+        }}
         ticks={months.map((x, i) =>
           i % 3 === 0 ? `${mon[x.m - 1]} ${String(x.y).slice(2)}` : null,
         )}
@@ -318,10 +355,29 @@ export function AnmClimateContext({ p }: { p: LwPoint }) {
       />
       <DivergingBars
         values={months.map((x) => x.pA)}
-        titles={months.map(
-          (x) =>
-            `${label(x)}: ${x.p == null ? pick("fără date", "no data") : `${fmt(x.p)} mm (${signed(x.pA ?? 0, 0)} %)`}`,
-        )}
+        tip={(i) => {
+          const x = months[i];
+          return {
+            title: longLabel(x),
+            rows: isNum(x.p)
+              ? [
+                  { value: `${fmt(x.p)} mm`, label: pick("în lună", "in the month") },
+                  ...(isNum(x.pA)
+                    ? [
+                        {
+                          value: `${signed(x.pA, 0)} %`,
+                          label: pick(
+                            `față de normală (${fmt(x.pN)} mm)`,
+                            `vs normal (${fmt(x.pN)} mm)`,
+                          ),
+                          color: x.pA >= 0 ? "var(--an-wet)" : "var(--an-dry)",
+                        },
+                      ]
+                    : []),
+                ]
+              : [{ value: pick("fără date complete", "no complete data") }],
+          };
+        }}
         ticks={months.map((x, i) =>
           i % 3 === 0 ? `${mon[x.m - 1]} ${String(x.y).slice(2)}` : null,
         )}
@@ -352,10 +408,28 @@ export function AnmClimateContext({ p }: { p: LwPoint }) {
       </p>
       <DivergingBars
         values={years.map((x) => (isNum(x.t) ? +(x.t - normT).toFixed(2) : null))}
-        titles={years.map(
-          (x) =>
-            `${x.y}: ${isNum(x.t) ? `${fmt(x.t, 1)} °C (${signed(x.t - normT)} °C)` : pick("an incomplet", "incomplete year")}`,
-        )}
+        tip={(i) => {
+          const x = years[i];
+          return {
+            title: String(x.y),
+            rows: isNum(x.t)
+              ? [
+                  { value: `${fmt(x.t, 1)} °C`, label: pick("media anului", "annual mean") },
+                  {
+                    value: `${signed(x.t - normT)} °C`,
+                    label: pick(
+                      `față de normală (${fmt(normT, 1)} °C)`,
+                      `vs normal (${fmt(normT, 1)} °C)`,
+                    ),
+                    color: x.t >= normT ? "var(--an-warm)" : "var(--an-cold)",
+                  },
+                  ...(isNum(x.p)
+                    ? [{ value: `${fmt(x.p)} mm`, label: pick("precipitații", "precipitation") }]
+                    : []),
+                ]
+              : [{ value: pick("an incomplet în sursa ANM", "incomplete year in the ANM source") }],
+          };
+        }}
         ticks={years.map((x) => (x.y % 20 === 0 ? String(x.y) : null))}
         pos="var(--an-warm)"
         neg="var(--an-cold)"

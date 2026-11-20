@@ -22,6 +22,11 @@ const DEIMS = P.filter((p) => p.deims);
 const STATIONS = P.filter((p) => p.cat === "statiune");
 const sheet = (key: string) => sheetKey(lwByKey(key)!);
 
+/** Small heading above a group of controls in the map panel. */
+const PANEL_LABEL = "mt-3 mb-1.5 text-[11.5px] font-semibold tracking-[0.08em] text-subtle uppercase";
+const LAYER_BUTTON =
+  "h-8 w-full rounded-md border border-border-strong bg-surface px-2 text-[13px] font-semibold text-navy hover:bg-surface-2 aria-pressed:border-navy aria-pressed:bg-navy aria-pressed:text-white dark:text-foreground dark:aria-pressed:border-lime dark:aria-pressed:bg-lime dark:aria-pressed:text-navy";
+
 function MapHero() {
   const [hidden, setHidden] = useState<Cat[]>([]);
   const [base, setBase] = useState<BaseName>("osm");
@@ -41,60 +46,50 @@ function MapHero() {
         base={base}
         eea={eea}
         radar={radar}
-        padTopLeft={[420, 0]}
+        padTopLeft={[400, 0]}
         label="Harta stațiunilor, platformelor LTSER, siturilor LTER și stațiilor ICOS"
         onEea={(k, ok) => setEeaMsg(ok ? null : `Stratul „${EEA[k].label}” vine de la serverele EEA și nu se poate încărca acum.`)}
         className="h-[62vh] min-h-[420px] md:h-[min(78vh,760px)] md:min-h-[540px]"
       />
-      <div className="z-[500] max-h-[calc(100%-40px)] overflow-auto border-b border-border bg-surface p-5 md:absolute md:top-5 md:left-5 md:w-[380px] md:rounded-xl md:border md:shadow-[0_18px_44px_rgba(14,42,59,0.22)] lg:left-[max(20px,calc((100vw-1920px)/2+48px))]">
-        <p className="text-[12.5px] font-semibold tracking-[0.1em] text-accent uppercase">LifeWatch România · Universitatea din București</p>
-        <h1 className="mt-2 font-display text-[27px] leading-[1.1] font-bold tracking-[-0.01em] text-navy dark:text-foreground">Harta zonelor de cercetare</h1>
-        <p className="mt-2 text-[15px] leading-[1.5] text-muted">Stațiunile noastre, platformele LTSER, siturile LTER, stațiile de flux și cele 20 de stații climatice LifeWatch, pe aceeași hartă. Alegeți un punct ca să vedeți habitatele, clima și speciile observate acolo.</p>
-        <fieldset className="mt-3 grid gap-0.5">
+      <div className="z-[500] max-h-[calc(100%-24px)] overflow-auto border-b border-border bg-surface p-4 md:absolute md:top-3 md:left-3 md:w-[372px] md:rounded-xl md:border md:shadow-[0_18px_44px_rgba(14,42,59,0.22)] lg:left-[max(12px,calc((100vw-1920px)/2+48px))]">
+        <p className="text-[11px] font-semibold tracking-[0.06em] text-accent uppercase">LifeWatch România · Universitatea din București</p>
+        <h1 className="mt-1.5 font-display text-[24px] leading-[1.15] font-bold tracking-[-0.01em] text-navy dark:text-foreground">Harta zonelor de cercetare</h1>
+        <p className="mt-1.5 text-[13.5px] leading-[1.45] text-muted">Stațiunile noastre, platformele LTSER, siturile LTER, stațiile de flux și cele 20 de stații climatice LifeWatch, pe aceeași hartă. Alegeți un punct ca să vedeți habitatele, clima și speciile observate acolo.</p>
+        <fieldset className="mt-2.5 grid">
           <legend className="sr-only">Ce se afișează pe hartă</legend>
           {CAT_ORDER.map((c) => (
-            <label key={c} className="flex min-h-[38px] cursor-pointer items-center gap-2.5 rounded-lg px-2 text-[14px] font-medium hover:bg-ground">
-              <input type="checkbox" checked={!hidden.includes(c)} onChange={() => toggleCat(c)} className="size-[18px] accent-[#2f7d4f]" />
+            <label key={c} className="flex min-h-[32px] cursor-pointer items-center gap-2.5 rounded-lg px-2 text-[13.5px] font-medium hover:bg-ground">
+              <input type="checkbox" checked={!hidden.includes(c)} onChange={() => toggleCat(c)} className="size-[17px] accent-[#2f7d4f]" />
               <CatShape cat={c} />
               {CAT[c].label}
               <span className="tabular ml-auto text-[12px] text-subtle">{COUNTS[c] ?? 0}</span>
             </label>
           ))}
         </fieldset>
-        <BaseSwitch value={base} onChange={setBase} className="mt-3" />
-        <div role="group" aria-label="Straturi tematice" className="mt-2.5 flex flex-wrap items-center gap-1.5">
-          <span className="mr-1 text-[13px] text-subtle">Straturi:</span>
+        <p className={PANEL_LABEL}>Fundalul hărții</p>
+        <BaseSwitch value={base} onChange={setBase} className="grid grid-cols-4 gap-1.5" />
+        <p className={PANEL_LABEL}>Straturi</p>
+        <div role="group" aria-label="Straturi tematice" className="grid grid-cols-2 gap-1.5">
           {["n2k", "ecosys", "wet"].map((k) => (
-            <button
-              key={k}
-              type="button"
-              aria-pressed={eea.includes(k)}
-              onClick={() => toggleEea(k)}
-              className="h-8 rounded-md border border-border-strong bg-surface px-3 text-[13px] font-semibold text-navy hover:bg-surface-2 aria-pressed:border-navy aria-pressed:bg-navy aria-pressed:text-white dark:text-foreground dark:aria-pressed:border-lime dark:aria-pressed:bg-lime dark:aria-pressed:text-navy"
-            >
+            <button key={k} type="button" aria-pressed={eea.includes(k)} onClick={() => toggleEea(k)} className={LAYER_BUTTON}>
               {EEA[k].short}
             </button>
           ))}
-          <button
-            type="button"
-            aria-pressed={radar}
-            onClick={() => setRadar((r) => !r)}
-            className="h-8 rounded-md border border-border-strong bg-surface px-3 text-[13px] font-semibold text-navy hover:bg-surface-2 aria-pressed:border-navy aria-pressed:bg-navy aria-pressed:text-white dark:text-foreground dark:aria-pressed:border-lime dark:aria-pressed:bg-lime dark:aria-pressed:text-navy"
-          >
+          <button type="button" aria-pressed={radar} onClick={() => setRadar((r) => !r)} className={LAYER_BUTTON}>
             Radar ANM
           </button>
         </div>
         {eeaMsg ? <p className="mt-2 text-[12.5px] text-subtle">{eeaMsg}</p> : null}
-        <div className="mt-4 flex flex-wrap gap-2.5">
-          <Button asChild variant="dark" size="site">
+        <div className="mt-4 grid grid-cols-2 gap-2">
+          <Button asChild variant="dark" size="site" className="col-span-2 w-full">
             <a href={explorerHref()}>Deschide exploratorul</a>
           </Button>
-          <Button asChild variant="outline" size="site">
+          <Button asChild variant="outline" size="site" className="w-full">
             <a href={LTSER_URL} target="_blank" rel="noreferrer">
               LTSER Explorer <ArrowUpRight />
             </a>
           </Button>
-          <Button asChild variant="green" size="site">
+          <Button asChild variant="green" size="site" className="w-full">
             <Link to="acces">Acces</Link>
           </Button>
         </div>

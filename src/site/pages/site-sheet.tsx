@@ -537,7 +537,7 @@ function Climate({ p }: { p: LwPoint }) {
               </b>{" "}
               · media perioadei {fmt(series.mean, 1)} °C
             </p>
-            <YearBars data={series.shifted} label="Temperatura medie anuală" />
+            <YearBars data={series.shifted} label="Temperatura medie anuală" tip={(_, v) => [{ value: `${fmt(v + series.min - 0.2, 1)} °C`, label: isEn() ? "annual mean" : "media anului" }]} />
             <p className="text-[13px] text-subtle">Barele arată diferența față de anul cel mai rece din serie ({fmt(series.min, 1)} °C). Sursa: NASA POWER, serie lunară MERRA-2.</p>
           </>
         ) : (
@@ -664,7 +664,7 @@ function Biodiversity({ p }: { p: LwPoint }) {
         </div>
         <div>
           <H3>Observații pe ani</H3>
-          {years ? <YearBars data={years} label="Observații iNaturalist pe ani" /> : <p className="text-[13px] text-subtle">Apăsați „Actualizează live” ca să încărcați histograma.</p>}
+          {years ? <YearBars data={years} label="Observații iNaturalist pe ani" tip={(_, v) => [{ value: fmt(v), label: isEn() ? "observations" : "observații" }]} /> : <p className="text-[13px] text-subtle">Apăsați „Actualizează live” ca să încărcați histograma.</p>}
         </div>
       </div>
       <Section title="Cele mai observate specii" className="mt-8">
