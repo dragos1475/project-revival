@@ -38,6 +38,7 @@ import { Container } from "../components/primitives";
 import { BaseSwitch, EEA, LwMap, SHEET_OVERLAYS, type BaseName } from "../components/lw-map";
 import { CatShape } from "../components/lw-shapes";
 import { Bars, Climograph, ClimographLegend, MONTHS, YearBars } from "../components/lw-charts";
+import { AnmClimateContext } from "../components/anm-climate";
 import { Gallery, useLightbox } from "../components/lw-gallery";
 import { ChipLink, Chips, H3, KeyValues, Note, PointTags, Tag } from "../components/lw-ui";
 import { isEn } from "../i18n/core";
@@ -464,10 +465,12 @@ function Climate({ p }: { p: LwPoint }) {
   const cell = "border-b border-border px-2 py-1.5 text-right tabular";
   return (
     <>
+      {p.ours ? <AnmClimateContext p={p} /> : null}
       {failed ? <Offline what={failed} /> : null}
       {!c && loading === "clim" ? <p className="text-subtle">Se încarcă climatologia NASA POWER…</p> : null}
       {c ? (
         <>
+          <H3>Climatologia regională NASA POWER</H3>
           <KeyValues
             className="mb-4"
             rows={[

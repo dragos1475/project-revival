@@ -424,6 +424,9 @@
 /* Climograph colours. */
 .climograph, :root { --cg-p: #8fc1d6; --cg-p-text: #1f6e8c; --cg-t: #0e2a3b; --cg-band: #2f7d4f; }
 :root[data-theme="dark"], :root[data-theme="dark"] .climograph { --cg-p: #3e7f9c; --cg-p-text: #8fc1d6; --cg-t: #eaf1f3; --cg-band: #b9e27a; }
+/* Anomaly bars of the ANM climate context: warmer / colder, wetter / drier than the normal. */
+:root { --an-warm: #c4472f; --an-cold: #2f6fa8; --an-wet: #1f7f8c; --an-dry: #b5772b; }
+:root[data-theme="dark"] { --an-warm: #ef7f68; --an-cold: #78acdc; --an-wet: #63bfc9; --an-dry: #e2a660; }
 
 /* LifeWatch logo (components/logo.tsx). The intro: globe settles, the arrow travels round it from the top,
    then the leaf drifts down and settles under the microscope lens. */
