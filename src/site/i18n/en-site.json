@@ -1,8 +1,13 @@
 {
 "dict": {
 "Straturi": "Layers",
-"Radar ANM": "ANM radar",
-"pentru radarul de precipitații,": "for the precipitation radar,",
+"Radar și avertizări": "Radar and warnings",
+"pentru radarul de precipitații și avertizări,": "for the precipitation radar and warnings,",
+"Vremea": "Weather",
+"Clima din 1961": "Climate since 1961",
+"Date ANM · grila climatică zilnică": "ANM data · daily climate grid",
+"Cum s-a încălzit fiecare loc din 1961": "How each place has warmed since 1961",
+"Dungile climatice ale locurilor noastre, calculate pe grila omogenizată a Administrației Naționale de Meteorologie, și harta încălzirii întregii țări.": "The climate stripes of our places, computed on the homogenised grid of the National Meteorological Administration, and the warming map of the whole country.",
 "Climatologia regională NASA POWER": "Regional NASA POWER climatology",
 "Flux de CH₄": "CH₄ flux",
 "Turnul de covarianță turbulentă măsoară schimburile de CO₂, metan, vapori de apă și energie dintre ecosistem și atmosferă; metanul este măsurat cu un analizor LI-7700. Datele validate se publică prin ICOS Carbon Portal.": "The eddy-covariance tower measures CO₂, methane, water vapour and energy exchange between the ecosystem and the atmosphere; methane is measured with a LI-7700 analyser. Validated data are published through the ICOS Carbon Portal.",

@@ -39,6 +39,8 @@ import { BaseSwitch, EEA, LwMap, SHEET_OVERLAYS, type BaseName } from "../compon
 import { CatShape } from "../components/lw-shapes";
 import { Bars, Climograph, ClimographLegend, MONTHS, YearBars } from "../components/lw-charts";
 import { AnmClimateContext } from "../components/anm-climate";
+import { SiteStripes } from "../components/climate-stripes";
+import { inRomania, SiteWeather, WarningsAt } from "../components/site-weather";
 import { Gallery, useLightbox } from "../components/lw-gallery";
 import { ChipLink, Chips, H3, KeyValues, Note, PointTags, Tag } from "../components/lw-ui";
 import { isEn } from "../i18n/core";
@@ -51,6 +53,7 @@ const TABS = [
   { id: "prezentare", label: "Prezentare" },
   { id: "habitate", label: "Habitate" },
   { id: "clima", label: "Climă" },
+  { id: "vremea", label: "Vremea" },
   { id: "biodiversitate", label: "Biodiversitate" },
   { id: "retele", label: "eLTER și ICOS" },
   { id: "date", label: "Date și API" },
@@ -465,6 +468,7 @@ function Climate({ p }: { p: LwPoint }) {
   const cell = "border-b border-border px-2 py-1.5 text-right tabular";
   return (
     <>
+      {p.ours ? <SiteStripes p={p} /> : null}
       {p.ours ? <AnmClimateContext p={p} /> : null}
       {failed ? <Offline what={failed} /> : null}
       {!c && loading === "clim" ? <p className="text-subtle">Se încarcă climatologia NASA POWER…</p> : null}
@@ -911,7 +915,10 @@ export function SiteSheetPage({ point }: { point: LwPoint }) {
   // A place picked on the map replaces the sheet until a marker or the list is used again.
   const [custom, setCustom] = useState<LwPoint | null>(null);
   const p = custom ?? point;
-  const [tab, setTab] = useState<TabId>(lastTab);
+  const [chosen, setTab] = useState<TabId>(lastTab);
+  // The weather tab needs a place in Romania, where the ANM forecast and stations are.
+  const tabs = TABS.filter((t) => t.id !== "vremea" || inRomania(p));
+  const tab = tabs.some((t) => t.id === chosen) ? chosen : "prezentare";
   const [base, setBase] = useState<BaseName>("osm");
   const [eea, setEea] = useState<string[]>([]);
   const [eeaFail, setEeaFail] = useState<string | null>(null);
@@ -923,7 +930,7 @@ export function SiteSheetPage({ point }: { point: LwPoint }) {
     const j = e.key === "ArrowRight" ? i + 1 : e.key === "ArrowLeft" ? i - 1 : null;
     if (j == null) return;
     e.preventDefault();
-    const next = TABS[(j + TABS.length) % TABS.length];
+    const next = tabs[(j + tabs.length) % tabs.length];
     choose(next.id);
     document.getElementById(`tab-${next.id}`)?.focus();
   };
@@ -998,9 +1005,10 @@ export function SiteSheetPage({ point }: { point: LwPoint }) {
               </Button>
             </div>
           </div>
+          {inRomania(p) ? <WarningsAt p={p} compact onOpen={() => choose("vremea")} className="mt-3.5" /> : null}
         </Container>
         <div role="tablist" aria-label="Instrumente" className="mt-4 flex gap-0.5 overflow-x-auto border-b border-border px-5 sm:px-7">
-          {TABS.map((t, i) => (
+          {tabs.map((t, i) => (
             <button
               key={t.id}
               id={`tab-${t.id}`}
@@ -1021,6 +1029,7 @@ export function SiteSheetPage({ point }: { point: LwPoint }) {
           {tab === "prezentare" ? <Overview key={p.key} p={p} /> : null}
           {tab === "habitate" ? <Habitats key={p.key} p={p} eea={eea} setEea={setEea} eeaFail={eeaFail} /> : null}
           {tab === "clima" ? <Climate key={p.key} p={p} /> : null}
+          {tab === "vremea" ? <SiteWeather key={p.key} p={p} /> : null}
           {tab === "biodiversitate" ? <Biodiversity key={p.key} p={p} /> : null}
           {tab === "retele" ? <Networks key={p.key} p={p} /> : null}
           {tab === "date" ? <DataApi key={p.key} p={p} /> : null}

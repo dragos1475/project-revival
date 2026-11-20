@@ -46,6 +46,7 @@ function MapHero() {
         base={base}
         eea={eea}
         radar={radar}
+        warnings={radar}
         padTopLeft={[400, 0]}
         label="Harta stațiunilor, platformelor LTSER, siturilor LTER și stațiilor ICOS"
         onEea={(k, ok) => setEeaMsg(ok ? null : `Stratul „${EEA[k].label}” vine de la serverele EEA și nu se poate încărca acum.`)}
@@ -76,7 +77,7 @@ function MapHero() {
             </button>
           ))}
           <button type="button" aria-pressed={radar} onClick={() => setRadar((r) => !r)} className={LAYER_BUTTON}>
-            Radar ANM
+            Radar și avertizări
           </button>
         </div>
         {eeaMsg ? <p className="mt-2 text-[12.5px] text-subtle">{eeaMsg}</p> : null}
@@ -511,7 +512,7 @@ export default function HomePage() {
               <b>iNaturalist</b> pentru observații verificabile; fotografiile incluse au licențe Creative Commons, cu autorul afișat. <b>GBIF</b> pentru numărul de ocurențe.
             </p>
             <p>
-              <b>NASA POWER</b> pentru climatologia lunară, <b>EEA și Copernicus</b> pentru Natura 2000 și straturile de habitat, <b>ICOS Carbon Portal</b> pentru catalogul stațiilor, <b>ANM</b> pentru radarul de precipitații, <b>CARTO</b> și <b>Natural Earth</b> pentru hărțile de bază.
+              <b>NASA POWER</b> pentru climatologia lunară, <b>EEA și Copernicus</b> pentru Natura 2000 și straturile de habitat, <b>ICOS Carbon Portal</b> pentru catalogul stațiilor, <b>ANM</b> pentru radarul de precipitații și avertizări, <b>CARTO</b> și <b>Natural Earth</b> pentru hărțile de bază.
             </p>
           </div>
         </Container>

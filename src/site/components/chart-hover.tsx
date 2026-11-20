@@ -20,8 +20,9 @@ export function HoverChart({
   W,
   H,
   n,
-  x0,
-  bw,
+  x0 = 0,
+  bw = 0,
+  cols,
   label,
   tip,
   anchorY,
@@ -33,8 +34,10 @@ export function HoverChart({
   H: number;
   /** Number of columns, their left edge and width in viewBox units. */
   n: number;
-  x0: number;
-  bw: number;
+  x0?: number;
+  bw?: number;
+  /** Columns of unequal width (left edge and width), instead of x0 and bw; for example uneven time steps. */
+  cols?: { x: number; w: number }[];
   label: string;
   tip: (i: number) => Tip | null;
   /** Top of the marks of a column, in viewBox units; the tooltip sits above it. */
@@ -44,8 +47,9 @@ export function HoverChart({
   className?: string;
 }) {
   const [active, setActive] = useState<number | null>(null);
+  const col = (i: number) => cols?.[i] ?? { x: x0 + i * bw, w: bw };
   const t = active == null ? null : tip(active);
-  const cx = active == null ? 0 : (x0 + (active + 0.5) * bw) / W;
+  const cx = active == null ? 0 : (col(active).x + col(active).w / 2) / W;
   const cy = active == null ? 0 : Math.max(anchorY(active), 0) / H;
   const box = useRef<HTMLDivElement>(null);
   const tipBox = useRef<HTMLDivElement>(null);
@@ -85,9 +89,9 @@ export function HoverChart({
       >
         {active != null ? (
           <rect
-            x={x0 + active * bw}
+            x={col(active).x}
             y={0}
-            width={bw}
+            width={col(active).w}
             height={H}
             fill="var(--chart-axis)"
             opacity={0.07}
@@ -97,9 +101,9 @@ export function HoverChart({
         {Array.from({ length: n }, (_, i) => (
           <rect
             key={i}
-            x={x0 + i * bw}
+            x={col(i).x}
             y={0}
-            width={bw}
+            width={col(i).w}
             height={H}
             fill="transparent"
             onPointerEnter={() => setActive(i)}

@@ -11,6 +11,7 @@ import { pageHref, useRouter } from "../router";
 import { isEn, t } from "../i18n/core";
 import { shapeSvg } from "./lw-shapes";
 import { RadarPlayer } from "./anm-radar";
+import { WarningsLayer } from "./anm-warnings";
 
 export type BaseName = "osm" | "sat" | "topo" | "vector" | "clc" | "eunis1" | "eunis2";
 export const BASES: { id: BaseName; label: string }[] = [
@@ -124,6 +125,8 @@ export interface LwMapProps {
   zoomSnap?: number;
   /** Animated ANM precipitation radar, with its player in the lower right corner. */
   radar?: boolean;
+  /** ANM weather warnings in force, as coloured county and zone polygons, with a summary in the upper right corner. */
+  warnings?: boolean;
   label: string;
 }
 
@@ -141,7 +144,7 @@ interface MapState {
 }
 
 export function LwMap(props: LwMapProps) {
-  const { points, className, base = "osm", hiddenCats = [], eea = [], fit = "romania", padTopLeft, maxFitZoom = 11, labels, markerSize, popups = true, boundaries = true, selected, onSelect, scrollZoom = "click", onEea, dimmedKeys, onMapClick, zoomSnap = 1, radar, label } = props;
+  const { points, className, base = "osm", hiddenCats = [], eea = [], fit = "romania", padTopLeft, maxFitZoom = 11, labels, markerSize, popups = true, boundaries = true, selected, onSelect, scrollZoom = "click", onEea, dimmedKeys, onMapClick, zoomSnap = 1, radar, warnings, label } = props;
   const el = useRef<HTMLDivElement>(null);
   const st = useRef<MapState | null>(null);
   const [ready, setReady] = useState(false);
@@ -407,7 +410,12 @@ export function LwMap(props: LwMapProps) {
     <div className={cn("relative isolate overflow-hidden bg-[#dce8ee] dark:bg-[#0c2534]", className)}>
       <div ref={el} role="region" aria-label={label} className="absolute inset-0" />
       {radar && leaflet ? <RadarPlayer L={leaflet.L} map={leaflet.map} theme={theme} /> : null}
-      {status ? <div className="absolute top-3 right-14 z-[500] max-w-[300px] rounded-lg bg-surface/95 px-2.5 py-1.5 text-[12px] text-subtle shadow-card">{status}</div> : null}
+      {status || (warnings && leaflet) ? (
+        <div className="absolute top-3 right-14 z-[500] grid max-w-[300px] justify-items-end gap-1.5">
+          {status ? <div className="rounded-lg bg-surface/95 px-2.5 py-1.5 text-[12px] text-subtle shadow-card">{status}</div> : null}
+          {warnings && leaflet ? <WarningsLayer L={leaflet.L} map={leaflet.map} /> : null}
+        </div>
+      ) : null}
       {legend ? (
         <details open={legendOpen} className="absolute right-2.5 bottom-6 z-[500] max-h-[calc(100%-60px)] max-w-[260px] overflow-auto rounded-lg bg-surface/95 px-2.5 py-2 text-[12px] shadow-card max-sm:[&:not([open])]:w-fit">
           <summary className="cursor-pointer font-semibold">{isEn() ? "Legend" : "Legendă"} · {legend.title}</summary>

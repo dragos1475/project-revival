@@ -10,6 +10,7 @@ import { LwMap } from "../components/lw-map";
 import { CatShape, CatTag } from "../components/lw-shapes";
 import { Card, CardBody, CardText, CardTitle, Note, Tag } from "../components/lw-ui";
 import { SiteCard } from "./home";
+import { NetworkStripes } from "../components/climate-stripes";
 
 const DEIMS = LW_POINTS.filter((p) => p.deims);
 const RANK = ["ltser", "icos", "meteo", "lter"];
@@ -134,6 +135,7 @@ export default function SitesPage() {
             ["noastre", "Siturile noastre"],
             ["retea", "Toată rețeaua"],
             ["icos", "Stațiile ICOS"],
+            ["clima", "Clima din 1961"],
           ].map(([id, label]) => (
             <Link key={id} to="situri" hash={id} className="inline-flex min-h-[38px] shrink-0 items-center rounded-md border border-border px-3.5 text-[14px] font-semibold text-navy hover:border-navy hover:bg-navy hover:text-white dark:text-foreground dark:hover:border-lime dark:hover:bg-lime dark:hover:text-navy">
               {label}
@@ -214,6 +216,15 @@ export default function SitesPage() {
             </a>
             .
           </Note>
+        </Container>
+      </Band>
+
+      <Band tone="ground" id="clima">
+        <Container>
+          <SectionHeader eyebrow="Date ANM · grila climatică zilnică" title="Cum s-a încălzit fiecare loc din 1961" lede="Dungile climatice ale locurilor noastre, calculate pe grila omogenizată a Administrației Naționale de Meteorologie, și harta încălzirii întregii țări." />
+          <div className="mt-8">
+            <NetworkStripes />
+          </div>
         </Container>
       </Band>
     </>
