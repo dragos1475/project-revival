@@ -10,6 +10,7 @@ import { asset, CAT, CAT_ORDER, fmt, photoOf, sheetKey, type Cat, type LwPoint }
 import { pageHref, useRouter } from "../router";
 import { isEn, t } from "../i18n/core";
 import { shapeSvg } from "./lw-shapes";
+import { RadarPlayer } from "./anm-radar";
 
 export type BaseName = "osm" | "sat" | "topo" | "vector" | "clc" | "eunis1" | "eunis2";
 export const BASES: { id: BaseName; label: string }[] = [
@@ -121,6 +122,8 @@ export interface LwMapProps {
   onMapClick?: (lat: number, lon: number) => void;
   /** Fractional zoom steps, for small maps that must fit an area closely. */
   zoomSnap?: number;
+  /** Animated ANM precipitation radar, with its player in the lower right corner. */
+  radar?: boolean;
   label: string;
 }
 
@@ -138,10 +141,11 @@ interface MapState {
 }
 
 export function LwMap(props: LwMapProps) {
-  const { points, className, base = "osm", hiddenCats = [], eea = [], fit = "romania", padTopLeft, maxFitZoom = 11, labels, markerSize, popups = true, boundaries = true, selected, onSelect, scrollZoom = "click", onEea, dimmedKeys, onMapClick, zoomSnap = 1, label } = props;
+  const { points, className, base = "osm", hiddenCats = [], eea = [], fit = "romania", padTopLeft, maxFitZoom = 11, labels, markerSize, popups = true, boundaries = true, selected, onSelect, scrollZoom = "click", onEea, dimmedKeys, onMapClick, zoomSnap = 1, radar, label } = props;
   const el = useRef<HTMLDivElement>(null);
   const st = useRef<MapState | null>(null);
   const [ready, setReady] = useState(false);
+  const [leaflet, setLeaflet] = useState<{ L: typeof LT; map: LT.Map } | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const theme = useTheme();
   const { navigate } = useRouter();
@@ -231,6 +235,7 @@ export function LwMap(props: LwMapProps) {
       observer = new ResizeObserver(() => map.invalidateSize());
       observer.observe(el.current);
       setReady(true);
+      setLeaflet({ L, map });
     });
     return () => {
       cancelled = true;
@@ -238,6 +243,7 @@ export function LwMap(props: LwMapProps) {
       st.current?.map.remove();
       st.current = null;
       setReady(false);
+      setLeaflet(null);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -400,6 +406,7 @@ export function LwMap(props: LwMapProps) {
   return (
     <div className={cn("relative isolate overflow-hidden bg-[#dce8ee] dark:bg-[#0c2534]", className)}>
       <div ref={el} role="region" aria-label={label} className="absolute inset-0" />
+      {radar && leaflet ? <RadarPlayer L={leaflet.L} map={leaflet.map} theme={theme} /> : null}
       {status ? <div className="absolute top-3 right-14 z-[500] max-w-[300px] rounded-lg bg-surface/95 px-2.5 py-1.5 text-[12px] text-subtle shadow-card">{status}</div> : null}
       {legend ? (
         <details open={legendOpen} className="absolute right-2.5 bottom-6 z-[500] max-h-[calc(100%-60px)] max-w-[260px] overflow-auto rounded-lg bg-surface/95 px-2.5 py-2 text-[12px] shadow-card max-sm:[&:not([open])]:w-fit">

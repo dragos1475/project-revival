@@ -27,6 +27,7 @@ function MapHero() {
   const [base, setBase] = useState<BaseName>("osm");
   const [eea, setEea] = useState<string[]>([]);
   const [eeaMsg, setEeaMsg] = useState<string | null>(null);
+  const [radar, setRadar] = useState(false);
   const toggleCat = (c: Cat) => setHidden((h) => (h.includes(c) ? h.filter((x) => x !== c) : [...h, c]));
   const toggleEea = (k: string) => {
     setEeaMsg(null);
@@ -39,6 +40,7 @@ function MapHero() {
         hiddenCats={hidden}
         base={base}
         eea={eea}
+        radar={radar}
         padTopLeft={[420, 0]}
         label="Harta stațiunilor, platformelor LTSER, siturilor LTER și stațiilor ICOS"
         onEea={(k, ok) => setEeaMsg(ok ? null : `Stratul „${EEA[k].label}” vine de la serverele EEA și nu se poate încărca acum.`)}
@@ -73,6 +75,14 @@ function MapHero() {
               {EEA[k].short}
             </button>
           ))}
+          <button
+            type="button"
+            aria-pressed={radar}
+            onClick={() => setRadar((r) => !r)}
+            className="h-8 rounded-md border border-border-strong bg-surface px-3 text-[13px] font-semibold text-navy hover:bg-surface-2 aria-pressed:border-navy aria-pressed:bg-navy aria-pressed:text-white dark:text-foreground dark:aria-pressed:border-lime dark:aria-pressed:bg-lime dark:aria-pressed:text-navy"
+          >
+            Radar ANM
+          </button>
         </div>
         {eeaMsg ? <p className="mt-2 text-[12.5px] text-subtle">{eeaMsg}</p> : null}
         <div className="mt-4 flex flex-wrap gap-2.5">
@@ -506,7 +516,7 @@ export default function HomePage() {
               <b>iNaturalist</b> pentru observații verificabile; fotografiile incluse au licențe Creative Commons, cu autorul afișat. <b>GBIF</b> pentru numărul de ocurențe.
             </p>
             <p>
-              <b>NASA POWER</b> pentru climatologia lunară, <b>EEA și Copernicus</b> pentru Natura 2000 și straturile de habitat, <b>ICOS Carbon Portal</b> pentru catalogul stațiilor, <b>CARTO</b> și <b>Natural Earth</b> pentru hărțile de bază.
+              <b>NASA POWER</b> pentru climatologia lunară, <b>EEA și Copernicus</b> pentru Natura 2000 și straturile de habitat, <b>ICOS Carbon Portal</b> pentru catalogul stațiilor, <b>ANM</b> pentru radarul de precipitații, <b>CARTO</b> și <b>Natural Earth</b> pentru hărțile de bază.
             </p>
           </div>
         </Container>
